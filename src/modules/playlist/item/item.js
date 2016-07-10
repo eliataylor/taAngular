@@ -25,7 +25,6 @@ export default [
                 },
                 isPlaying: () => {
                     let progress = parseInt($scope.progress, 10);
-
                     return progress > 0;
                 },
                 actions: {

@@ -1,4 +1,9 @@
 <main id="main-app">
+	<div style="display:none">
+	    <input type="text" value="{{assets}}" ng-model="dataSources.assets" />
+	    <input type="text" value="{{api}}" ng-model="dataSources.api" />
+	    <input type="text" value="{{dataSources.angular}}" ng-model="dataSources.angular" />
+    </div>
     <sol-tabs id="main-view" selected="{{defaultTab}}">
         <search-pane
             tab-id="search-pane"

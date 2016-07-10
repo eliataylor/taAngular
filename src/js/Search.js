@@ -3,7 +3,7 @@ import './Services';
 import './Filters';
 import 'angular';
 export default angular.module('ui.search', ['services', 'filters', 'solScroll2top'])
-    .directive('searchPane', ['$timeout', 'youtubeAPI', 'lastfm', function($timeout, youtubeAPI, lastfm) {
+    .directive('searchPane', ['$timeout', 'youtubeAPI', 'taAPI', 'lastfm', function($timeout, youtubeAPI, taAPI, lastfm) {
         return {
             restrict: 'E',
             templateUrl: '/html/search/pane.html',
@@ -11,8 +11,9 @@ export default angular.module('ui.search', ['services', 'filters', 'solScroll2to
             scope: true,
             link: function($scope, $element, $attrs, $transclude) {
                 let lastSearch = null;
-
-                $scope.query = '';
+                
+                $scope.query = '';    
+                
                 $scope.search = (value) => {
                     if (lastSearch)
                         clearTimeout(lastSearch);
@@ -21,7 +22,7 @@ export default angular.module('ui.search', ['services', 'filters', 'solScroll2to
                         $scope.searching = true;
                         $scope.albums = [];
 
-                        youtubeAPI.search($scope.query).then(function(items) {
+                        taAPI.search($scope.query).then(function(items) {
                             $scope.$emit('items-fetched', items);
                             $scope.items = items;
                             $scope.searching = false;
@@ -44,7 +45,7 @@ export default angular.module('ui.search', ['services', 'filters', 'solScroll2to
                 }
             }
         };
-    }]).directive('searchResultAlbums', ['$rootScope', 'youtubeAPI', 'playList', 'lastfm', ($rootScope, youtubeAPI, playList, lastfm) => {
+    }]).directive('searchResultAlbums', ['$rootScope', 'youtubeAPI', 'taAPI', 'playList', 'lastfm', ($rootScope, youtubeAPI, taAPI, playList, lastfm) => {
         return {
             restrict: 'E',
             templateUrl: '/html/search/albums-list.html',
@@ -63,7 +64,7 @@ export default angular.module('ui.search', ['services', 'filters', 'solScroll2to
                             'short' : (track.duration < 1200 ?
                                 'medium' : 'long');
 
-                        return youtubeAPI.search({
+                        return taAPI.search({
                             q: `${artist} ${title}`,
                             maxResults: 1,
                             videoDuration

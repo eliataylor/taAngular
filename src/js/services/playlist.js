@@ -9,6 +9,7 @@ export default [
     '$location',
     'youtubePlayer',
     'youtubeAPI',
+    'taAPI',
     'playListVolume',
     'solBackend',
     '$rootScope',
@@ -18,6 +19,7 @@ export default [
         $location,
         ytPlayer,
         ytAPI,
+        taAPI,
         playListVolume,
         solBackend,
         $rootScope
@@ -131,6 +133,10 @@ export default [
         }
     });
 
+    function getTaList(cid) {
+    	
+    }
+    
     function getSavedList() {
         return $q((resolve, reject) => {
             let hash = window.location.hash;
@@ -219,18 +225,32 @@ export default [
     };
 
     function formatItem (item) {
-        let newItem = {
-            contentDetails: {
-                duration: item.contentDetails.duration
-            },
-            id: item.id,
-            snippet: {
-                thumbnails: {
-                    default: item.snippet.thumbnails.default
+        let newItem = {};
+    	if (typeof item.track_id != 'undefined') {
+        	// conditional for TA too
+    		newItem.contentDetails = item;
+    		newItem.contentDetails.duration = 20;
+    		newItem.id = "ta_" + item.track_id;
+    		newItem.snippet = {
+                    thumbnails: {
+                        default: {'url':item.track_image}
+                    },
+                    title: item.track_title
+                }
+    	} else {
+            newItem = {
+                contentDetails: {
+                    duration: item.contentDetails.duration
                 },
-                title: item.snippet.title
-            }
-        };
+                id: item.id,
+                snippet: {
+                    thumbnails: {
+                        default: item.snippet.thumbnails.default
+                    },
+                    title: item.snippet.title
+                }
+            };
+    	}
 
         return newItem;
     }
@@ -272,27 +292,41 @@ export default [
         return nowPlaying;
     };
 
-    this.add = function(videoId, idx) {
+    this.add = function(videoId, idx, source) {
         var that = this;
+        if (!source || source == 'youtube') {
+            return ytAPI.getVideo(videoId).then(function(resp) {
+                	var item = resp.data.items[0],
+                    thumb = item.snippet.thumbnails.default.url,
+                    title = item.snippet.title,
+                    trimmed = title.length >= 30 ? title.substr(0, 27) + '...' :
+                    title,
+                    text = 'Track "' + trimmed + '" has been added to playlist';
 
-        return ytAPI.getVideo(videoId).then(function(resp) {
-            var item = resp.data.items[0],
-                thumb = item.snippet.thumbnails.default.url,
-                title = item.snippet.title,
-                trimmed = title.length >= 30 ? title.substr(0, 27) + '...' :
-                title,
-                text = 'Track "' + trimmed + '" has been added to playlist';
+                that.addItem(idx, item);
+                if (that.playlist.length === 1 ||
+                    (idx === that.playlist.length - 1 && state === st.STOPPED))
+                    that.play(idx);
 
-            that.addItem(idx, item);
-            if (that.playlist.length === 1 ||
-                (idx === that.playlist.length - 1 && state === st.STOPPED))
-                that.play(idx);
+                $rootScope.$broadcast('toast::notify', {
+                    thumb: thumb,
+                    text: text
+                });
+            });        	
+        } else {
+            var item = videoId;
+        	if (idx < 0) idx = this.playlist.length;
+            that.addItem(idx, videoId); // videoId if full track object
+            if (that.playlist.length === 1 || (idx === that.playlist.length - 1 && state === st.STOPPED))
+                    that.play(idx);
 
+        	var trimmed = item.track_title.length >= 30 ? item.track_title.substr(0, 27) + '...' : item.track_title;
+        	var text = 'Track "' + trimmed + '" has been added to playlist';
             $rootScope.$broadcast('toast::notify', {
-                thumb: thumb,
+                thumb: item.track_image,
                 text: text
-            });
-        });
+            }); 
+        }
     };
 
     this.addFirst = function(videoId) {
@@ -341,23 +375,29 @@ export default [
         var idx = typeof index === 'number' ? index : (nowPlaying || 0),
             videoId = this.playlist[idx].id;
 
-
-        if (idx === nowPlaying && !force) {
-            sendActionToServer({
-                type: 'play'
-            });
-
-            return ytPlayer.play();
+        if (videoId && videoId.indexOf('ta_') === 0) {
+        	console.log('learn to play regular audio files');
+        	console.log(this.playlist[idx]);
+        	//document.getElementById('audioPlayer')
+        	$scope.audioSrc = videoId.track_src;
         } else {
-            return ytPlayer.loadVideo(videoId).then(function() {
-                ytPlayer.play();
-                setNowPlaying(idx);
-
-                sendActionToServer({
-                    type: 'playByIndex',
-                    index: nowPlaying
-                });
-            });
+	        if (idx === nowPlaying && !force) {
+	            sendActionToServer({
+	                type: 'play'
+	            });
+	
+	            return ytPlayer.play();
+	        } else {
+	            return ytPlayer.loadVideo(videoId).then(function() {
+	                ytPlayer.play();
+	                setNowPlaying(idx);
+	
+	                sendActionToServer({
+	                    type: 'playByIndex',
+	                    index: nowPlaying
+	                });
+	            });
+	        }
         }
     };
 

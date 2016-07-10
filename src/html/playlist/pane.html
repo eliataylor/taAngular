@@ -2,6 +2,16 @@
     ng-style="{'background-image': 'url(' + backgroundImg + ')'}"
     data-background="{{!!backgroundImg}}"
     sol-vibrate="currentlyDragging">
+    <div class="taBlock">
+    	<select class="select"
+    		id="challengeSelector"
+    		ng-options="challengeItem as challengeItem.challenge_title for challengeItem in challenges track by challengeItem.challenge_id" 
+    		ng-model="selectedChallengeItem"  
+    		ng-change="getTAplaylist()"  
+    		>
+    	</select>
+    	<challenge-block style="display:none;" ng-model="challenge" ></challenge-block>    	
+    </div>    
     <app-topbar id="topbar"></app-topbar>
     <playlist-progress data-progress="progress" duration="{{duration}}"></playlist-progress>
     <header class="playlist-actions">
@@ -46,6 +56,7 @@
                 sol-slide-rm-handle=".title"
                 sol-slide-rm-after="savePlaylist(); $emit('closeTrackActions')"
                 data-index="{{$index}}"
+                data-tid="{{item.tid || -1}}"
                 data-title="{{item.snippet.title}}"
                 play-next="{{item.playNext || ''}}"
                 stop-here="{{item.stopHere || ''}}"

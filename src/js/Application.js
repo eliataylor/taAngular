@@ -52,7 +52,13 @@ export default angular.module('Application', [
             ApiKey.fetchKeys().then(function() {
                 $element[0].classList.add('loaded');
             });
-
+            
+            $scope.dataSources = {
+        		assets: 'https://localhost.fantasytrackballs.com',
+        		angular: 'https://localplayer.fantasytrackballs.com',
+        		api : 'https://localhost.fantasytrackballs.com'
+            };
+        
             // Notify users when there's a new version
             cacheUpdated.then(() => {
                 $rootScope.$broadcast('toast::notify', {
@@ -62,4 +68,20 @@ export default angular.module('Application', [
             });
         }
     };
-}]);
+}])
+
+//.config(["$httpProvider", function($httpProvider) {
+//	//$httpProvider.defaults.withCredentials = true;
+//	$httpProvider.defaults.headers.common['Access-Control-Allow-Credentials'] = true; 
+//    $httpProvider.interceptors.push('middleware');
+//}]).factory('middleware', function() {
+//    return {
+//        request: function(config) {
+//        	if (config.url.indexOf("/html") !== 0) {
+//                config.url = "https://example.com/api/" + config.url;
+//        	}
+//        	return config.url;
+//        }
+//    };
+//});
+;

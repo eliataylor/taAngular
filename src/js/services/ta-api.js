@@ -1,11 +1,38 @@
-var basePath = 'https://www.googleapis.com/youtube/v3', maxResults = 50;
+var taBasePath = 'https://localhost.fantasytrackballs.com/json',
+	basePath = 'https://www.googleapis.com/youtube/v3', 
+    maxResults = 50;
 
 export default ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
     var APIKEY = null;
     $rootScope.$on('youtube-apikey', function(e, key) {
         APIKEY = key;
     });
+    
+    $http.defaults.withCredentials = true;    
+    this.getChallenges = function(gid) {    	
+        return $http.get(taBasePath + '/challenges', null, {withCredential: true}).then(function(list) {
+        	if (typeof list.data.error == 'string') {
+        		alert(list.data.error);
+        	} 
+            return list.data;
+        });    	
+    }
+    
+    this.getTAplaylist = function(cid) {
+    	var that = this;
+        var path = taBasePath + '/playlist?cid=' + cid;  
 
+        return $http.get(path).then(function(list) {
+        	if (typeof list.errors == 'string') {
+        		alert(list.data.errors);
+        	} else {
+        		// populate playlist!!
+                console.log(list.data.popBody);
+        	}
+    		return list.data.popBody;
+        });        	
+    }
+    
     this.search = function(opts) {
         var that = this;
         var query;
@@ -43,7 +70,7 @@ export default ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
             });
 
             return resp.data.items;
-        });
+        });        
     };
 
     this.getVideo = function(videoId) {
@@ -54,7 +81,6 @@ export default ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
             rejectedPromise.reject();
             return rejectedPromise.promise;
         }
-
 
         opts.maxResults = maxResults;
         opts.part = 'snippet,statistics,contentDetails';

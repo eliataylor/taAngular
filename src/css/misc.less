@@ -100,6 +100,13 @@ body {
     overflow:hidden;
 }
 
+section.wrapper > *{
+overflow:auto!important;
+overflow-y:auto!important;
+overflow-x:hidden!important;
+height:100%!important; 
+}
+
 [tab-id="search-pane"] {
     .flexed(0);
     .mixin-search-pane;
@@ -125,6 +132,9 @@ body {
     .flexed(1);
     .mixin-playlist-pane;
     .transition(@easing:ease-out; @duration:.4s);
+    overflow:auto;
+    overflow-y:auto!important;
+    height:100%!important;
 }
 
 #footer {

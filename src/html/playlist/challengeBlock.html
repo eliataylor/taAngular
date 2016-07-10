@@ -1,0 +1,78 @@
+<div id="challengeBlock" class="moduleBlock {{challenge.challenge_status}}">
+	<div id="groupItem-cid-{{challenge.challenge_id}}" class="listViewItem" data-gid="{{challenge.group_id}}"
+		data-cid="{{challenge.challenge_id}}" data-status="{{challenge.challenge_status}}"
+		data-title="{{challenge.challenge_title}}">
+		<div class="subhead_area gradient">
+			<h3 class="subheading">
+				<span class="lineImg tmmss calendar"></span> {{challenge.challenge_status}} <span class="lime">unscheduled &amp; unsponsored</span>
+			</h3>
+		</div>
+
+		<div class="imgControlCol">
+			<a href="{{dataSources.assets}}/playlist?cid={{challenge.challenge_id}}"> <img align="left" class="largeImg"
+				src="{{dataSources.assets}}{{challenge.challenge_image}}"
+				>
+			</a>
+			<div class="btnBox">
+
+				<a class="bigBtn cdMusicBig" data-name="cdMusic"
+					data-params="{{challenge.challenge_id}}"
+					href="{{dataSources.api}}/forms/track-loader?cid={{challenge.challenge_id}}">
+					<div class="imgBg cdMusic"></div>
+					<div class="midX">Upload An Track</div>
+					<div class="rightBg"></div>
+				</a>
+				
+				<a class="bigBtn presentBoxMiniBig" data-name="presentBoxMini"
+					data-params="{{challenge.challenge_id}}"
+					href="{{dataSources.api}}/forms/sponsor-app?cid={{challenge.challenge_id}}">
+					<div class="imgBg presentBoxMini"></div>
+					<div class="midX">Sponsor This Challenge</div>
+					<div class="rightBg"></div>
+				</a>
+
+			</div>
+
+			<div class="btnBox">
+				<div class="starHolder bigStarHolder" data-cid="{{challenge.challenge_id}}"
+					data-status="{{challenge.challenge_status}}" title="100">
+					<div class="bigStarShadowPad">
+						<span data-cid="{{challenge.challenge_id}}" class="starFill starGreen" style="width:{{challenge.challenge_challenge_rating_avg}}%;"></span>
+						<span class="starFill starFocus" style="width: 100%"></span>
+					</div>
+					<div class="tmmss bigRaterMask"></div>
+				</div>
+				<span class="cRateContext"> Group average is <em class="lime">{{challenge.challenge_challenge_rating_avg}}%</em>
+					Click the stars to help sponsor this challenge
+				</span>
+			</div>
+
+			<!-- end non-compilations -->
+
+
+			<div class="readmore"></div>
+		</div>
+
+		<div class="listViewInfo">
+
+			<h3>{{challenge.challenge_title}}</h3>
+
+			<!-- pre-wrap whitespace requires one line php -->
+			<div class="summary">
+				<a class="headshotLink" href="{{dataSources.api}}/members/profile/{{challenge.challenge_author_id}}"><img
+					class="smImg"
+					src="//graph.facebook.com/100000210646549/picture?width=70&amp;height=70&amp;redirect=true"
+					align="left"></a>
+					{{challenge.challenge_summary}} <span class="miniText">(upload up to {{challenge.challenge_tracks_per_user}} tracks)</span>
+			</div>
+
+			<div class="authors">
+				<span class="author"><span class="tmmss authorIcon lineImg"></span>
+					Author, <a class="screenname" href="{{dataSources.api}}/members/profile/{{challenge.challenge_author_id}}">Username</a>. </span>
+			</div>
+
+			<div class="awards"></div>
+			<div class="clearer"></div>
+		</div>
+	</div>
+</div>
