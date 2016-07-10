@@ -1,0 +1,59 @@
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    DirectoryIndex index.html
+    RewriteBase /
+
+    RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    RewriteRule ^(.*)$ https://%1%{REQUEST_URI} [R=301,QSA,NC,L]
+    
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    RewriteCond %{REQUEST_URI} ^system.*
+    RewriteRule ^(.*)$ /index.html?/$1 [L]
+
+    RewriteCond %{REQUEST_URI} ^application.*
+    RewriteRule ^(.*)$ /index.html?/$1 [L]
+    
+    RewriteCond %{REQUEST_URI} ^preprocessing.*
+    RewriteRule ^(.*)$ /index.html?/$1 [L]
+
+    RewriteCond %{REQUEST_URI} ^dynohtml.*
+    RewriteRule ^(.*)$ /index.html?/$1 [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !(^wwwroot.*)
+    RewriteRule ^(.*)$ /index.html?/$1 [QSA,L]
+
+    RewriteCond %{REQUEST_URI} !^wwwroot/images/favicons/taCharacter.ico [NC]
+    RewriteCond %{REQUEST_URI} favicon\.(ico|png|gif)$ [NC] 
+    RewriteCond %{HTTP_HOST} (.+)
+    RewriteRule (.*) https://%3/wwwroot/images/favicons/taCharacter.ico [R=301,L]
+
+</IfModule>
+<IfModule mod_php5.c>
+   php_value short_open_tag 1
+ </IfModule>
+<IfModule !mod_rewrite.c>
+    ErrorDocument 404 index.html
+</IfModule>
+
+#<FilesMatch "*">
+#    <IfModule mod_headers.c>
+#        SetEnvIf Origin "http(s)?://(www\.)?(.com|staging.google.com|development.google.com|otherdomain.net|dev02.otherdomain.net)$" AccessControlAllowOrigin=$0
+#        Header add Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+#    </IfModule>
+#</FilesMatch>
+
+<IfModule mod_headers.c>
+#    SetEnvIf Origin "http(s)?://(www\.)?(domain1.org|domain2.com)$" AccessControlAllowOrigin=$0$1
+#    Header add Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+#    Header set Access-Control-Allow-Credentials true
+
+SetEnvIf Origin "^http(s)?://(.+\.)?(trackauthoritymusic\.com|fantasytrackballs\.com|fantasytrackball\.com|rsoundtrack\.com|fantasysongball\.com|)$" origin_is=$0 
+Header always add Access-Control-Allow-Origin %{origin_is}e env=origin_is
+Header set Access-Control-Allow-Credentials true
+</IfModule>
