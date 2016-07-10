@@ -256,7 +256,7 @@ export default [
     }
 
     this.addItem = function(idx, item) {
-        item = that.playlist.formatItem(item);
+        item = this.formatItem(item);
         that.playlist.splice(idx, 0, item);
         this.saveList();
     };
