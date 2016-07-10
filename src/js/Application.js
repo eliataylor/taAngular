@@ -67,7 +67,14 @@ export default angular.module('Application', [
                     persist: true
                 });
             });
-        }
+        },
+	    controller: function($scope, $element, $attrs, $transclude) {
+	        $scope.dataSources = {
+	        		assets: 'https://localhost.fantasytrackballs.com',
+	        		angular: 'https://localplayer.fantasytrackballs.com',
+	        		api : 'https://localhost.fantasytrackballs.com'
+	        }
+	    }   
     };
 }])
 

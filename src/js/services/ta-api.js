@@ -12,7 +12,7 @@ export default ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
     this.getChallenges = function(gid) {    	
         return $http.get(taBasePath + '/challenges', null, {withCredential: true}).then(function(list) {
         	if (typeof list.data.error == 'string') {
-        		alert(list.data.error);
+        		console.log(list.data.error);
         	} 
             return list.data;
         });    	
@@ -24,7 +24,7 @@ export default ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
 
         return $http.get(path).then(function(list) {
         	if (typeof list.errors == 'string') {
-        		alert(list.data.errors);
+        		console.log(list.data.errors);
         	} else {
         		// populate playlist!!
                 console.log(list.data.popBody);

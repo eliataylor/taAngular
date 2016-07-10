@@ -5,10 +5,11 @@
         width:100%;
         margin-bottom:10px;
         height:2em;
+        font-size:1em;
         font-weight:bolder;
         background:#F2F2F2;
 }
-
+.action.clear { clear:none!important; }
 .innerPane { position:relative;   height: 100%;
   overflow: scroll; }
 
@@ -176,7 +177,7 @@
             &:after {
                 @size:2 * @column;
                 content:"";
-                background-image:url('./css/assets/logo.svg');
+                background-image:url('./css/assets/logo.png');
                 background-size:cover;
                 width:@size;
                 height:@size;

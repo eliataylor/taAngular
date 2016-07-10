@@ -376,11 +376,10 @@ export default [
             videoId = this.playlist[idx].id;
 
         if (videoId && videoId.indexOf('ta_') === 0) {
-        	console.log('learn to play regular audio files');
+        	var src = 'https://trackauthoritymusic.com' + this.playlist[idx].contentDetails.track_location;
+        	console.log('learn to play regular audio files: ' + src);
         	console.log(this.playlist[idx]);
-        	//document.getElementById('audioPlayer')
-        	$scope.audioSrc = videoId.track_src;
-        	return $scope.audioSrc;
+        	return $rootScope.audioPlayer="<br /><audio controls><source src=\""+ src + "\" type=\"audio/mpeg\"> Your browser does not support the audio element. </audio>"
         } else {
 	        if (idx === nowPlaying && !force) {
 	            sendActionToServer({

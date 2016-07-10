@@ -2,9 +2,17 @@
 	<div id="groupItem-cid-{{challenge.challenge_id}}" class="listViewItem" data-gid="{{challenge.group_id}}"
 		data-cid="{{challenge.challenge_id}}" data-status="{{challenge.challenge_status}}"
 		data-title="{{challenge.challenge_title}}">
-		<div class="subhead_area gradient">
-			<h3 class="subheading">
-				<span class="lineImg tmmss calendar"></span> {{challenge.challenge_status}} <span class="lime">unscheduled &amp; unsponsored</span>
+		<div class="subhead_area" style="background:#111; padding:10px 0 8px 4px; margin: 0px 0 20px 0;vertical-align: middle;">
+			<h3 class="subheading" >
+				<span class="lineImg tmmss calendar"></span>            
+	            <span ng-if="!challenge.challenge_uploading_starts" class="lime">
+	            	unscheduled &amp; unsponsored</span>
+	            <span ng-if="challenge.challenge_status == 'playlist'" class="lime">
+	            	list closes {{fDate(challenge.challenge_uploading_ends)}}</span>
+	            <span ng-if="challenge.group_id == 3 && challenge.challenge_uploading_starts" class="lime">
+	            	Pool Deadline: {{fDate(challenge.challenge_uploading_starts)}}. Min. Cash Pool: $ {{challenge.challenge_minpool ? challenge.challenge_minpool : 125}}</span>
+	            <span ng-if="challenge.challenge_awarding_complete > 0" class="lime">
+	            	Won &amp; Awarded {{fDate(challenge.challenge_awarding_complete)}} by {{getUserName(challenge.challenge_winner_id, challenge.userids)}} </span>
 			</h3>
 		</div>
 
@@ -14,7 +22,8 @@
 			</a>
 			<div class="btnBox">
 
-				<a class="bigBtn cdMusicBig" data-name="cdMusic"
+				<a ng-if="challenge.challenge_status == 'playlist'" 
+					class="bigBtn cdMusicBig" data-name="cdMusic"
 					data-params="{{challenge.challenge_id}}"
 					href="{{dataSources.api}}/forms/track-loader?cid={{challenge.challenge_id}}">
 					<div class="imgBg cdMusic"></div>
@@ -22,7 +31,9 @@
 					<div class="rightBg"></div>
 				</a>
 				
-				<a class="bigBtn presentBoxMiniBig" data-name="presentBoxMini"
+				<a 
+					ng-if="!challenge.challenge_uploading_starts" 
+					class="bigBtn presentBoxMiniBig" data-name="presentBoxMini"
 					data-params="{{challenge.challenge_id}}"
 					href="{{dataSources.api}}/forms/sponsor-app?cid={{challenge.challenge_id}}">
 					<div class="imgBg presentBoxMini"></div>
@@ -36,20 +47,13 @@
 				<div class="starHolder bigStarHolder" data-cid="{{challenge.challenge_id}}"
 					data-status="{{challenge.challenge_status}}" title="100">
 					<div class="bigStarShadowPad">
-						<span data-cid="{{challenge.challenge_id}}" class="starFill starGreen" style="width:{{challenge.challenge_challenge_rating_avg}}%;"></span>
+						<span data-cid="{{challenge.challenge_id}}" class="starFill starGreen" style="width:{{challenge.challenge_rating_avg > 0 ? challenge.challenge_rating_avg : 0}}%;"></span>
 						<span class="starFill starFocus" style="width: 100%"></span>
 					</div>
 					<div class="tmmss bigRaterMask"></div>
 				</div>
-				<span class="cRateContext"> Group average is <em class="lime">{{challenge.challenge_challenge_rating_avg}}%</em>
-					Click the stars to help sponsor this challenge
-				</span>
+				<span class="cRateContext">Avg. <em class="lime">{{challenge.challenge_rating_avg > 0 ? challenge.challenge_rating_avg : 0}}%</em></span>
 			</div>
-
-			<!-- end non-compilations -->
-
-
-			<div class="readmore"></div>
 		</div>
 
 		<div class="listViewInfo">
@@ -60,14 +64,15 @@
 			<div class="summary">
 				<a class="headshotLink" href="{{dataSources.api}}/members/profile/{{challenge.challenge_author_id}}"><img
 					class="smImg"
-					src="//graph.facebook.com/100000210646549/picture?width=70&amp;height=70&amp;redirect=true"
+					src="{{getUserPic(challenge.challenge_author_id, challenge.userids)}}"
 					align="left"></a>
 					{{challenge.challenge_summary}} <span class="miniText">(upload up to {{challenge.challenge_tracks_per_user}} tracks)</span>
 			</div>
 
 			<div class="authors">
 				<span class="author"><span class="tmmss authorIcon lineImg"></span>
-					Author, <a class="screenname" href="{{dataSources.api}}/members/profile/{{challenge.challenge_author_id}}">Username</a>. </span>
+					Author, <a class="screenname" href="{{dataSources.api}}/members/profile/{{challenge.challenge_author_id}}">
+						{{getUserName(challenge.challenge_author_id, challenge.userids)}}</a>. </span>
 			</div>
 
 			<div class="awards"></div>
