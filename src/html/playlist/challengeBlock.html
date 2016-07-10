@@ -1,4 +1,4 @@
-<div id="challengeBlock" class="moduleBlock {{challenge.challenge_status}}">
+<div id="challengeBlock" class="moduleBlock {{challenge.challenge_status}}" >
 	<div id="groupItem-cid-{{challenge.challenge_id}}" class="listViewItem" data-gid="{{challenge.group_id}}"
 		data-cid="{{challenge.challenge_id}}" data-status="{{challenge.challenge_status}}"
 		data-title="{{challenge.challenge_title}}">
@@ -9,9 +9,8 @@
 		</div>
 
 		<div class="imgControlCol">
-			<a href="{{dataSources.assets}}/playlist?cid={{challenge.challenge_id}}"> <img align="left" class="largeImg"
-				src="{{dataSources.assets}}{{challenge.challenge_image}}"
-				>
+			<a href="{{dataSources.assets}}/playlist?cid={{challenge.challenge_id}}"> 
+			<img align="left" class="largeImg" ng-src="{{dataSources.assets + challenge.challenge_image}}" />
 			</a>
 			<div class="btnBox">
 

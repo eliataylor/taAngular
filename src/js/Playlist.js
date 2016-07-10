@@ -166,14 +166,15 @@ export default angular.module('ui.playlist',
                     	$scope.cid = parseInt($scope.selectedChallengeItem.challenge_id);
                     	$scope.$$prevSibling.query = $scope.$$prevSibling.query = $scope.selectedChallengeItem.challenge_title;
                     	if ($scope.cid > 0) {
-//                    		playList.clearList();
-//                            $location.search('playlist', null);
+                    		playList.clearList();
+                            $location.search('playlist', null);
 	                    	taAPI.getTAplaylist($scope.cid).then(function(challenge){	                    		
-	                        	document.getElementById('challengeBlock').style.display = "block";
 	                    		$scope.challenge = challenge;
-	                        	challenge.tracks.forEach(track => {
-	                                playList.add(track, -1, 'ta');
-	                            });
+	                        	document.getElementById('challengeBlock').style.display = "block";
+	                        	angular.forEach(challenge.tracks, function(track, key) {
+	                                    this.playlist.splice(this.playlist.length, 0, this.formatItem(track));
+	                        		}, playList);
+                    			playList.saveList();
 	                    	});
                     	} else {
                         	document.getElementById('challengeBlock').style.display = "none";                    		

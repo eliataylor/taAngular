@@ -224,7 +224,7 @@ export default [
         this.saveList();
     };
 
-    function formatItem (item) {
+    this.formatItem = function (item) { // TODO: probably shouldn't be exposed !
         let newItem = {};
     	if (typeof item.track_id != 'undefined') {
         	// conditional for TA too
@@ -256,7 +256,7 @@ export default [
     }
 
     this.addItem = function(idx, item) {
-        item = formatItem(item);
+        item = that.playlist.formatItem(item);
         that.playlist.splice(idx, 0, item);
         this.saveList();
     };
@@ -380,6 +380,7 @@ export default [
         	console.log(this.playlist[idx]);
         	//document.getElementById('audioPlayer')
         	$scope.audioSrc = videoId.track_src;
+        	return $scope.audioSrc;
         } else {
 	        if (idx === nowPlaying && !force) {
 	            sendActionToServer({

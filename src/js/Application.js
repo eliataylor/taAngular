@@ -44,21 +44,22 @@ export default angular.module('Application', [
         replace: true,
         scope: true,
         link: function($scope, $element) {
-            $scope.defaultTab = 0;
+            $scope.dataSources = {
+            		assets: 'https://localhost.fantasytrackballs.com',
+            		angular: 'https://localplayer.fantasytrackballs.com',
+            		api : 'https://localhost.fantasytrackballs.com'
+            };
+            
             if (playList.playlist.length) {
                 $scope.defaultTab = 1;
+            } else {
+                $scope.defaultTab = 0;
             }
 
             ApiKey.fetchKeys().then(function() {
                 $element[0].classList.add('loaded');
             });
-            
-            $scope.dataSources = {
-        		assets: 'https://localhost.fantasytrackballs.com',
-        		angular: 'https://localplayer.fantasytrackballs.com',
-        		api : 'https://localhost.fantasytrackballs.com'
-            };
-        
+
             // Notify users when there's a new version
             cacheUpdated.then(() => {
                 $rootScope.$broadcast('toast::notify', {

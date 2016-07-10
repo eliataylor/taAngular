@@ -1,7 +1,8 @@
 <li ng-click="emitAddLast()">
     <div class="thumb">
         <span class="thumb-wrapper">
-            <img ng-src="{{thumbnail}}" />
+            <img ng-if="thumbnail.indexOf('/wwwroot') === 0" ng-src="{{dataSources.assets}}{{thumbnail}}" />
+            <img ng-if="thumbnail.indexOf('/wwwroot') !== 0" ng-src="{{thumbnail}}" />
         </span>
     </div>
     <section class="title-and-actions">
