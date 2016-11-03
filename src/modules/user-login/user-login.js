@@ -25,20 +25,19 @@ var app = angular.module('user-login', ['sol-backend', 'services'])
     scope: true,
     link: function ($scope, element, attrs) {
 	  console.log('userLogin Directive: ', AUTH_EVENTS, $scope.isAuthenticated);
-	  
-	  
+	  	  
 	  var cookie = false;
 	  var value = "; " + document.cookie;
 	  var parts = value.split("; " + 'tacsession' + "=");
 	  if (parts.length == 2) cookie = parts.pop().split(";").shift();
-	  //console.log('cookie', cookie);
+	  console.log('cookie', cookie);
 	  if (cookie.length > 10) {
-		  $http.get('https://localhost.trackauthoritymusic.com/json/getme')
+		  $http.get('https://localhost.trackauthoritymusic.com/json/getme', { withCredentials: true })
 		  .then(function(res) {
 			  if (res.data.error) {
 				  console.log('tacsession failed', res.data.error);
-			  } else if (res.data.user_id){
-				  $scope.setCurrentUser(res.data);				 
+			  } else if (res.data.user_id) {
+				  $scope.setCurrentUser(res.data);
 			  }
 		  }, 
 		    function(response) { // optional
@@ -46,7 +45,6 @@ var app = angular.module('user-login', ['sol-backend', 'services'])
 		  });
 	  }
 	  // /json/getme > IF VALID set, ELSE reject 
-	  // google-signing
       $scope.toggleGoogleAuth = () => {
           if (!$scope.authenticated)
               solBackend.authenticateWithPopup();
@@ -104,15 +102,16 @@ var app = angular.module('user-login', ['sol-backend', 'services'])
 	      
 	    return query.length ? query.substr(0, query.length - 1) : query;
 	  };
-	//$http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 	return $http({
         url: 'https://localhost.trackauthoritymusic.com/manage/users/login?tar=doAjax',
         method: "POST",
         dataType: 'json',
-        data: serializeParams(credentials),
-        headers: {
-            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
+        data: serializeParams(credentials)
+//        ,
+//        withCredentials: true,
+//        headers: {
+//            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+//        }
     })
     .then(function(res) {
 	        Session.create(res.data);

@@ -8,9 +8,8 @@ export default ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
         APIKEY = key;
     });
     
-    $http.defaults.withCredentials = true;    
     this.getChallenges = function(gid) {    	
-        return $http.get(taBasePath + '/json/challenges', null, {withCredential: true}).then(function(list) {
+        return $http.get(taBasePath + '/json/challenges').then(function(list) {
         	if (typeof list.data.error == 'string') {
         		console.log(list.data.error);
         	} 

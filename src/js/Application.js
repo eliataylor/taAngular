@@ -97,17 +97,39 @@ export default angular.module('Application', [
 	    }   
     };
 }])
-//.config(["$httpProvider", function($httpProvider) {
-//	//$httpProvider.defaults.withCredentials = true;
+.config(["$httpProvider", function($httpProvider) {
+    $httpProvider.interceptors.push('middleware');
+//	$httpProvider.defaults.withCredentials = true;
 //	$httpProvider.defaults.headers.common['Access-Control-Allow-Credentials'] = true; 
-//    $httpProvider.interceptors.push('middleware');
-//}]).factory('middleware', function() {
-//    return {
-//        request: function(config) {
-//        	if (config.url.indexOf("http") !== 0) {
-//                config.url = "https://example.com/api/" + config.url;
-//        	}
-//        	return config.url;
-//        }
-//    };
-//});
+}]).factory('middleware', function() {
+    return {
+        request: function(config) {
+    		if (config.url.indexOf("trackauthoritymusic.com") > -1) {
+        		console.log("HTTP REQUEST", config);
+        		if (!config.headers || typeof config.headers != 'object') {
+        			console.log('instantiating headers???');
+        			config.headers = {};
+        		}
+        		config.withCredentials = true;
+    			//config.headers['Access-Control-Allow-Credentials'] = true;
+    			config.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
+    		}
+        	return config;
+        },
+//	   'requestError': function(rejection) {
+//	      if (canRecover(rejection)) {
+//	        return responseOrNewPromise
+//	      }
+//	      return $q.reject(rejection);
+//	    },
+//	    'response': function(response) {
+//	      return response;
+//	    },
+//	   'responseError': function(rejection) {
+//	      if (canRecover(rejection)) {
+//	        return responseOrNewPromise
+//	      }
+//	      return $q.reject(rejection);
+//	    }
+    };
+});

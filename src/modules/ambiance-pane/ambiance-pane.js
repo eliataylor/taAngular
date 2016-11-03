@@ -37,10 +37,11 @@ export default angular.module('ambiance-pane',
         	var state = playList.getState();
         	
         	console.log('ambiance-pane knows isAuthenticated', $scope.isAuthenticated);
-        	if ($scope.isAuthenticated) {
+        	if (true || $scope.isAuthenticated) {
 
                 taAPI.getChallenges().then(function(response) {
                 	if (typeof response.popBody == 'object') {
+                		console.log('ALL CHALLENGESL: ', response);
                         $scope.challenges = response.popBody; // update main select
                         
                         /* check if a song is already queued

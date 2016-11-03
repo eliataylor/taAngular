@@ -1,4 +1,10 @@
 <div class="ambiance-pane">
-   Ambiance Panel
+   <select class="select"  
+  		id="challengeSelector"
+  		ng-options="challengeItem as challengeItem.challenge_title for challengeItem in challenges track by challengeItem.challenge_id" 
+  		ng-model="selectedChallengeItem"  
+  		ng-change="getTAplaylist()"  
+  		>
+  	</select>
    <challenge-block> </challenge-block>
 </div>
