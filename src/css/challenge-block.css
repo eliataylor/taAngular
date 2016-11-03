@@ -1,0 +1,98 @@
+
+#audio-player, #audioPlayer { 
+	width:100%; clear:both; float:left; margin:0;
+}
+#challengeSelector {
+        width:100%;
+        margin:0 0 0 0;
+        height:2em;
+        font-size:1em;
+        font-weight:bolder;
+        background:#F2F2F2;
+}
+.action.clear { clear:none!important; }
+.taBlock { position:relative; float:left; overflow:visible;}
+.innerPane { position:relative;   height: 100%; overflow-y: scroll; overflow:auto; }
+  
+
+#challengeBlock { position:relative; float:left; clear:both; margin:0; overflow:visible; }
+#challengeBlock h2 { float:left; clear:none; margin:6px 0 0 0; font-size:18px; letter-spacing: 1px; 
+			text-shadow: 1px 1px 2px #AAA; color:#000;  
+			position: relative; text-align:left; }
+#challengeBlock h2 a { color:#000!important; text-decoration:none; }
+#challengeBlock .starHolder { float:left; margin:-1px 0 10px -10px; }
+
+#challengeBlock .midX, .imgControlCol .bigBtn .midX { width:200px; }
+#challengeBlock .bigBtn, .imgControlCol .bigBtn { clear:left; float:left; margin:4px 0 10px 0; }
+
+.gridViewThumb { position:relative; clear:both; display:block; }
+.gridTitle { font-size:11px; margin:0;  }
+.gridSubTitle { font-style: italic; font-size:10px; margin:0;  }
+
+.btnBox { float:left; clear:left; position:relative; width:100%; max-width:300px; font-size:10px; margin:0; text-align:left; }
+.btnBox > p { margin:0 auto 0 auto; line-height:12px; text-align: center; }
+.btnBox .readmore { clear:left; position: relative; margin-top: 18px; margin-top:0; }  
+
+.bigBox { position:relative; clear:both; margin:0 auto; width:300px; }
+.bigBox, .bigGridMask, .bigGridImg, .bigGridImgs {overflow:hidden; -moz-border-radius:0 15px 15px 15px; border-radius:0 15px 15px 15px; -webkit-border-radius:0 15px 15px 15px; -o-border-radius:0 15px 15px 15px; }
+.bigGridMask { position:relative; overflow: hidden; width:100%; height: 100%; max-height:300px; 
+   -moz-box-shadow: 2px 2px 2px #ccc; -webkit-box-shadow: 2px 2px 2px #ccc; box-shadow: 2px 2px 2px #ccc;	
+}
+.bigGridImg { width:100%; clear:both; }
+.bigGridImg img { width:100%; z-index:2;}
+
+.bigGridImg .summary {
+	background:rgba(255,255,255,0.5); position:absolute; bottom: 0;
+    width:280px; left: 0; z-index:0;      
+}
+.bigGridImg .summary > div {
+	     max-height:290px; overflow-y:auto;
+}
+.bigGridImg .summary a {font-weight:bolder; white-space:nowrap}
+ 
+
+.gridControls { clear:both; width:100%; }
+.gridControls select { width:100%; }
+.gridInfo { float:left; clear:both; margin:auto 10px 0 6px}
+.gridInfo img { vertical-align:sub; max-height:30px; }
+ 
+ 
+.subhead_area { float:left; clear:both; width:100%; position: relative; margin:0; min-height:15px; padding:4px 0 4px 0; color:#fff; background:#000; }
+@media all and (min-width:600px) {
+.subhead_area { background:#000 url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIzMCUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMDAwMDAwIiBzdG9wLW9wYWNpdHk9IjAiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InVybCgjZ3JhZC11Y2dnLWdlbmVyYXRlZCkiIC8+Cjwvc3ZnPg==); background: -moz-linear-gradient(left, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%); /* FF3.6+ */ background: -webkit-gradient(linear, left top, right top, color-stop(30%,rgba(0,0,0,1)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */ background: -webkit-linear-gradient(left, rgba(0,0,0,1) 30%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */ background: -o-linear-gradient(left, rgba(0,0,0,1) 30%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */ background: -ms-linear-gradient(left, rgba(0,0,0,1) 30%,rgba(0,0,0,0) 100%); /* IE10+ */ background: linear-gradient(to right, rgba(0,0,0,1) 30%,rgba(0,0,0,0) 100%); /* W3C */ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00000000',GradientType=1 ); /* IE6-8 */}
+}
+
+.subheading { margin:0 5px 0 5px; font-weight: bold; font-size:0.917em; padding:0px; float:left; }
+
+.lineImg { height:20px; line-height: 20px; vertical-align: middle; margin-right:5px; }
+.lineImg.miniCharacter { margin-left:-4px; margin-right:8px }
+.lineImg2x { width:35px; }
+
+
+
+/* ====================== Media Block Object Base Styles ====================== */
+.mediablock { font-size: 0.917em; } 
+
+.mediablock .mediabody { position:relative; margin:0 5px 0 5px; padding:5px;} 
+
+.bigBtn .imgBg.camera {background:transparent url(/wwwroot/images/imgBtn-camera.png) no-repeat top left; }
+.bigBtn .imgBg.taCreditIcon  {background:transparent url(/wwwroot/images/imgBtn-taCreditIcon.png) no-repeat top left; }
+.bigBtn .imgBg.win1st {background:transparent url(/wwwroot/images/imgBtn-win1st.png) no-repeat top left; }
+.bigBtn .imgBg.lightBulb {background:transparent url(/wwwroot/images/imgBtn-lightBulb.png) no-repeat top left; }
+.bigBtn .imgBg.cdMusic {background:transparent url(/wwwroot/images/imgBtn-cdMusic.png) no-repeat top left; }
+.bigBtn .imgBg.calendar {background:transparent url(/wwwroot/images/imgBtn-calendar.png) no-repeat top left; }
+.bigBtn .imgBg.menuGroup {background:transparent url(/wwwroot/images/imgBtn-menuGroup.png) no-repeat top left; }
+.bigBtn .imgBg.menuProfile {background:transparent url(/wwwroot/images/imgBtn-menuProfile.png) no-repeat top left; }
+.bigBtn .imgBg.presentBoxMini {background:transparent url(/wwwroot/images/imgBtn-presentBoxMini.png) no-repeat top left; }
+.bigBtn .imgBg.musicDownload {background:transparent url(/wwwroot/images/imgBtn-musicDownload.png) no-repeat top left; }
+.bigBtn .imgBg.bigDollarIcon {background:transparent url(/wwwroot/images/imgBtn-bigDollarIcon.png) no-repeat top left; }
+.bigBtn .imgBg.taCharacter {background:transparent url(/wwwroot/images/imgBtn-taCharacter.png) no-repeat top left; }
+.bigBtn .imgBg.listenAndRate {background:transparent url(/wwwroot/images/imgBtn-rateAndListen.png) no-repeat top left; }
+.bigBtn .imgBg.redX {background:transparent url(/wwwroot/images/imgBtn-redX.png) no-repeat top left; }
+.bigBtn .imgBg.greenPlus {background:transparent url(/wwwroot/images/imgBtn-greenPlus.png) no-repeat top left; }
+
+.thumbHolder .thumbHolder { border:0 none; } /* for now they sometimes get nested dynamically */
+.headshotLink .tmmss { margin:30px 0 0 25px; }
+
+.imgControlCol { width:300px; clear:none; margin: 0 auto 5px auto; }
+.imgControlCol .thumbHolder { width:100%; height:300px; padding:0; }

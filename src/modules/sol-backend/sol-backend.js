@@ -11,13 +11,15 @@ export default angular.module('sol-backend', ['firebase', 'api-key'])
         let key = apiKey.get('firebase');
 
         if (key) {
-            let url = `https://${key}.firebaseio.com`;
+            console.log('firebase key: ', key);
+        	let url = key.databaseURL;
             let ref = new Firebase(url);
             resolve(ref);
         }
         else {
             $rootScope.$on('firebase-apikey', function(e, key) {
-                let url = `https://${key}.firebaseio.com`;
+                console.log('firebase-apikey: ', key);
+            	let url = key.databaseURL;
                 let ref = new Firebase(url);
                 resolve(ref);
             });
@@ -124,7 +126,6 @@ export default angular.module('sol-backend', ['firebase', 'api-key'])
             }).then(() => {
                 let playlists = firebase.child('playlists');
                 let data = { playlist };
-
                 return playlists.push(data);
             }).then((ref) => {
                 let metadata = firebase.child('playlists/metadata');

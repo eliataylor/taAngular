@@ -1,0 +1,22 @@
+<div class="user-login">
+	<iframe src="sink.html" name="sink" style="display: none"></iframe>
+	<form name="userLogin"
+		class="user-login-section" action="sink.html"
+		target="sink" method="post" ng-controller="LoginController"
+		ng-submit="login(credentials)" novalidate form-autofill-fix>
+		<div class="error-text"></div>
+		
+		<label for="user_email">Email:</label> 
+		<input type="text" class="user-input" 
+			id="user_email" name="user_email"
+			placeholder="Email" 
+			ng-model="credentials.user_email">
+		<label for="password">Password:</label> 
+		<input type="password" class="user-input" 
+			id="password" name="password"
+			placeholder="password"
+			ng-model="credentials.password">
+		
+		<button class="raised-button" type="submit">Login</button>
+	</form>
+</div>

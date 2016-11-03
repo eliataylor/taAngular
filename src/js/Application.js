@@ -1,4 +1,5 @@
 import '../plugins/plugins';
+
 import './Footer';
 import './Topbar';
 import './Search';
@@ -9,9 +10,12 @@ import '../modules/playlist/playlist';
 import '../modules/notifications/notifications';
 import '../modules/sol-peerjs/peerjs-service';
 import '../modules/sol-peerjs/sol-peerjs';
+import '../modules/sol-backend/sol-backend';
 import '../modules/user-playlists/user-playlists';
 import '../modules/google-signin/google-signin';
+import '../modules/user-login/user-login';
 import '../modules/peer-pane/peer-pane';
+import '../modules/ambiance-pane/ambiance-pane';
 import 'angular';
 
 const cacheUpdated = new Promise((resolve, reject) => {
@@ -32,12 +36,15 @@ export default angular.module('Application', [
     'notifications',
     'peerjs-service',
     'sol-peerjs',
+    'sol-backend',
     'user-playlists',
     'peer-pane',
+    'ambiance-pane',
+    'user-login',
     'playlist',
     'services',
     'plugins'
-]).directive('solarizdApp', ['$rootScope', 'ApiKey', 'playList', function($rootScope, ApiKey, playList) {
+]).directive('solarizdApp', ['$rootScope', 'ApiKey', 'playList', 'solBackend', function($rootScope, ApiKey, playList, solBackend) {
     return {
         restrict: 'E',
         templateUrl: '/html/app.html',
@@ -45,9 +52,9 @@ export default angular.module('Application', [
         scope: true,
         link: function($scope, $element) {
             $scope.dataSources = {
-            		assets: 'https://localhost.fantasytrackballs.com',
-            		angular: 'https://localplayer.fantasytrackballs.com',
-            		api : 'https://localhost.fantasytrackballs.com'
+            	assets: 'https://localplayer.trackauthoritymusic.com',
+            	angular: 'https://localplayer.trackauthoritymusic.com',
+            	api : 'https://localhost.trackauthoritymusic.com'
             };
             
             if (playList.playlist.length) {
@@ -55,7 +62,7 @@ export default angular.module('Application', [
             } else {
                 $scope.defaultTab = 0;
             }
-
+            
             ApiKey.fetchKeys().then(function() {
                 $element[0].classList.add('loaded');
             });
@@ -70,13 +77,13 @@ export default angular.module('Application', [
         },
 	    controller: function($scope, $element, $attrs, $transclude) {
 	        $scope.dataSources = {
-	        		assets: 'https://localhost.fantasytrackballs.com',
-	        		angular: 'https://localplayer.fantasytrackballs.com',
-	        		api : 'https://localhost.fantasytrackballs.com'
+	        	assets: 'https://localplayer.trackauthoritymusic.com',
+	        	angular: 'https://localplayer.trackauthoritymusic.com',
+	        	api : 'https://localhost.trackauthoritymusic.com'
 	        }
 	    }   
     };
-}])
+}]);
 
 //.config(["$httpProvider", function($httpProvider) {
 //	//$httpProvider.defaults.withCredentials = true;

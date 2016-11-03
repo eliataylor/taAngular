@@ -1,8 +1,7 @@
 import Filters from '../../../js/Filters';
 
-export default [
-        '$rootScope', '$http', 'playList',
-        function($rootScope, $http, playList) {
+export default ['$rootScope', '$http', 'playList', 'Track',
+    function($rootScope, $http, playList, Track) {
     var definitions = {
         restrict: 'E',
         templateUrl: '/modules/playlist/item/item.html',
@@ -19,6 +18,8 @@ export default [
             'index': '@index'
         },
         link: function($scope, $element, $attrs, $transclude) {
+        	$scope.challenge = null;
+        	
             Object.assign($scope, {
                 get idx () {
                     return parseInt($scope.index, 10);
@@ -54,6 +55,9 @@ export default [
                     },
                     remove: () => {
                         playList.remove($scope.idx);
+                    },
+                    submitToTa: () => {
+                        console.log('send to ta', $scope.idx);
                     }
                 }
             });

@@ -1,0 +1,97 @@
+.user-login {
+    .flexbox(@dir:column;@justify:flex-start);
+    height:100%;
+    width:100%;
+    text-align:justify;
+
+    .user-login-section {
+        .flexed(1);
+        padding:@row-pad @column-pad;
+        display:flex;
+        flex-direction:column;
+
+        &.active .button:before {
+            .icon(@fa-var-check-square-o);
+        }
+
+        &:not(.active) > .section-content::before {
+            content:"";
+            position:absolute;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            background:fadeout(@white, 20%);
+            z-index:1;
+        }
+    }
+
+    .error-text {
+        padding:@row-pad @column-pad;
+    }
+
+    .raised-button {
+        display:inline-block;
+        text-transform:uppercase;
+        box-shadow:0px 3px 5px -2px @shadow-color;
+        border:solid @thin-border @inactive-text-dark;
+        padding:@row-pad @column-pad;
+        margin:@row-pad 0;
+        cursor:pointer;
+        transition:transform .1s ease-out, box-shadow .1s ease-out;
+
+        &:active {
+            box-shadow:0px 3px 5px -5px @shadow-color;
+            transform:translateY(3px);
+        }
+
+        &.disabled {
+            box-shadow:none;
+            color:@inactive-text-dark;
+            transform:translateY(0px);
+        }
+    }
+
+    .button-row {
+        .flexbox(@justify:center);
+    }
+
+    .button {
+        font-size:@medium-text;
+        text-transform:capitalize;
+        margin:@row-pad 0;
+        cursor:pointer;
+
+        &:before {
+            .icon(@fa-var-square-o);
+            display:inline-block;
+            width:@row / 2;
+        }
+
+    }
+
+    .user-input {
+        font-size:@large-text;
+        line-height:@large-text;
+        border:solid @thin-border @inactive-text-dark;
+        padding:@thick-border @column-pad;
+        margin-bottom:@row-pad;
+        display:flex;
+        align-items:center;
+
+        &:before {
+            content:"Host ID";
+            text-transform:uppercase;
+            font-family:"Roboto Slab";
+            font-size:@small-text;
+            font-weight:bold;
+            color:@inactive-text-dark;
+        }
+
+        & > * {
+            .flexbox(@align:center);
+            .flexed(1);
+        }
+    }
+    
+}

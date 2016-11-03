@@ -3,15 +3,15 @@
     data-background="{{!!backgroundImg}}"
     sol-vibrate="currentlyDragging">
     <div class="innerPane">
-    <div class="taBlock">
-    	<select class="select"
+    <div class="taBlock" >
+    	<select class="select"  
     		id="challengeSelector"
     		ng-options="challengeItem as challengeItem.challenge_title for challengeItem in challenges track by challengeItem.challenge_id" 
     		ng-model="selectedChallengeItem"  
     		ng-change="getTAplaylist()"  
     		>
     	</select>
-    	<challenge-block style="display:none;" ng-model="challenge" ></challenge-block>    	
+    	<challenge-block style="display:none;" ></challenge-block>    	
     </div>    
     <app-topbar id="topbar"></app-topbar>
     <playlist-progress data-progress="progress" duration="{{duration}}"></playlist-progress>
@@ -22,12 +22,13 @@
         </span>
 
         <span class="action clearAngular" ng-click="clearPlaylist()">
-            <span class="text">Clear Playlist</span>
+            <span class="text">Create Challenge</span>
         </span>
 
         <span class="action save" ng-click="publishPlaylist()">
-            <span class="text">Create Link</span>
-        </span>
+            <span class="text">Save Order</span>
+        </span>        
+        
     </header>
     <section class="playlist-statusline">
         <span class="playlist-title" ng-show="metadata">{{metadata.name || '-'}}</span>
@@ -56,6 +57,7 @@
                 sol-slide-rm="items"
                 sol-slide-rm-handle=".title"
                 sol-slide-rm-after="savePlaylist(); $emit('closeTrackActions')"
+                data-challenge="{{$challenge}}"
                 data-index="{{$index}}"
                 data-tid="{{item.tid || -1}}"
                 data-title="{{item.snippet.title}}"

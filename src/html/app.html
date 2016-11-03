@@ -1,10 +1,22 @@
 <main id="main-app">
 	<div style="display:none">
-	    <input type="text" value="{{assets}}" ng-model="dataSources.assets" />
-	    <input type="text" value="{{api}}" ng-model="dataSources.api" />
+	    <input type="text" value="{{dataSources.assets}}" ng-model="dataSources.assets" />
+	    <input type="text" value="{{dataSources.api}}" ng-model="dataSources.api" />
 	    <input type="text" value="{{dataSources.angular}}" ng-model="dataSources.angular" />
     </div>
     <sol-tabs id="main-view" selected="{{defaultTab}}">
+    
+    	<ambiance-pane
+			ng-if="authenticated"
+    	    tab-id="ambiance-pane"
+            tab-title="Ambiance"
+            tab-icon="ambiance" ></ambiance-pane>
+		
+    	<user-login
+    	    tab-id="user-login"
+            tab-title="Login/Register"
+            tab-icon="login" ></user-login>
+            
         <search-pane
             tab-id="search-pane"
             tab-title="Search"

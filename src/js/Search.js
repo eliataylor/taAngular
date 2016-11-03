@@ -22,7 +22,7 @@ export default angular.module('ui.search', ['services', 'filters', 'solScroll2to
                         $scope.searching = true;
                         $scope.albums = [];
 
-                        taAPI.search($scope.query).then(function(items) {
+                        youtubeAPI.search($scope.query).then(function(items) {
                             $scope.$emit('items-fetched', items);
                             $scope.items = items;
                             $scope.searching = false;
@@ -64,7 +64,7 @@ export default angular.module('ui.search', ['services', 'filters', 'solScroll2to
                             'short' : (track.duration < 1200 ?
                                 'medium' : 'long');
 
-                        return taAPI.search({
+                        return youtubeAPI.search({
                             q: `${artist} ${title}`,
                             maxResults: 1,
                             videoDuration

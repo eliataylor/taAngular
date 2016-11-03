@@ -133,8 +133,23 @@ export default [
         }
     });
 
-    function getTaList(cid) {
-    	
+    function getTAplaylist (cid) {
+    	$scope.cid = parseInt($scope.selectedChallengeItem.challenge_id);
+    	$scope.$$prevSibling.query = $scope.$$prevSibling.query = $scope.selectedChallengeItem.challenge_title;
+    	if ($scope.cid > 0) {
+    		playList.clearList();
+            $location.search('playlist', null);
+        	taAPI.getTAplaylist($scope.cid).then(function(challenge){	                    		
+        		$scope.challenge = challenge;
+            	document.getElementById('challengeBlock').style.display = "block";
+            	angular.forEach(challenge.tracks, function(track, key) {
+                        this.playlist.splice(this.playlist.length, 0, this.formatItem(track));
+            		}, playList);
+    			playList.saveList();
+        	});
+    	} else {
+        	document.getElementById('challengeBlock').style.display = "none";                    		
+    	}
     }
     
     function getSavedList() {
@@ -223,14 +238,25 @@ export default [
         this.metadata = null;
         this.saveList();
     };
-
-    this.formatItem = function (item) { // TODO: probably shouldn't be exposed !
+    
+    this.getYoutubeId = function(url){
+        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+        var match = url.match(regExp);
+        return (match&&match[7].length==11)? match[7] : false;
+    };
+    
+    this.formatItem = function (item) { 
+    	console.log("FORMATTING TRACK", item);
         let newItem = {};
     	if (typeof item.track_id != 'undefined') {
         	// conditional for TA too
     		newItem.contentDetails = item;
-    		newItem.contentDetails.duration = 20;
-    		newItem.id = "ta_" + item.track_id;
+    		newItem.contentDetails.duration = 180; // wrong   		
+    		newItem.id = this.getYoutubeId(item.track_youtube);
+    		if (!newItem.id) {
+    			newItem.id = "ta_" + item.track_id; // should never happen
+    			console.log('failed gettin youtube videoID', item);
+    		}
     		newItem.snippet = {
                     thumbnails: {
                         default: {'url':item.track_image}

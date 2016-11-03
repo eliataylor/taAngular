@@ -1,34 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+  		<meta content="default-src trackauthority: file: data: 'self' 'unsafe-eval' 'unsafe-inline' gap:  http://trackauthoritymusic.com https://trackauthoritymusic.com http://*.trackauthoritymusic.com https://*.trackauthoritymusic.com http://facebook.net https://facebook.net http://*.facebook.net https://*.facebook.net http://googleapis.com https://googleapis.com http://*.googleapis.com https://*.googleapis.com http://google-analytics.com https://google-analytics.com http://*.google-analytics.com https://*.google-analytics.com http://facebook.com https://facebook.com http://*.facebook.com https://*.facebook.com http://googleusercontent.com https://googleusercontent.com http://*.googleusercontent.com https://*.googleusercontent.com http://gstatic.com https://gstatic.com http://*.gstatic.com https://*.gstatic.com http://fbcdn.net https://fbcdn.net http://*.fbcdn.net https://*.fbcdn.net http://youtube.com https://youtube.com http://*.youtube.com https://*.youtube.com http://ytimg.com https://ytimg.com http://*.ytimg.com https://*.ytimg.com http://apis.google.com https://apis.google.com http://*.apis.google.com https://*.apis.google.com http://accounts.google.com https://accounts.google.com http://*.accounts.google.com https://*.accounts.google.com http://firebaseapp.com https://firebaseapp.com http://*.firebaseapp.com https://*.firebaseapp.com http://firebaseio.com https://firebaseio.com http://*.firebaseio.com https://*.firebaseio.com wss://*.firebaseio.com;"
+   		http-equiv="Content-Security-Policy"/>
+                
+        <meta http-equiv="Cache-control" content="public">
+        <META HTTP-EQUIV="Pragma" CONTENT="public">
+        <meta name="expires" content="Thu, 02 Feb 17 19:23:43 -0800">
+        
+        <link rel="apple-touch-startup-image" href="https://trackauthoritymusic.com/wwwroot/images/favicons/taCharacter.ico" />
+        <link rel="shortcut icon" href="https://trackauthoritymusic.com/wwwroot/images/favicons/taCharacter.ico" />
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://trackauthoritymusic.com/wwwroot/images/favicons/taCharacter.ico" />
+        <link rel="icon" type="image/png" href="https://trackauthoritymusic.com/wwwroot/images/logo.png">
+        <link rel="shortcut icon"         href="https://trackauthoritymusic.com/wwwroot/images/favicons/taCharacter.ico">
+        <link rel="apple-touch-icon"      href="https://trackauthoritymusic.com/wwwroot/images/favicons/taCharacter.ico">
+    
         <meta charset="utf-8">
         <meta name="application-name" content="Track Authority Music">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta property="fb:admins" content="100000210646549"/>
         <meta property="fb:app_id" content="267212653413336" />
-        <meta name="description" content="A platform to reward each other for sharing good music and curating perfect compilations" />
+        <meta name="description" content="perfecting playlists by awarding musical tastes." />
         <meta name="keywords" content="radio, playlists, compilations, betting on music" />
         <meta name="author" content="Eli A Taylor of TaylorMadeTraffic.com" />
         <meta name="language" content="en-us" />
 
-           <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-           <meta name="apple-mobile-web-app-capable" content="yes"  />
-           <meta name="apple-mobile-web-app-status-bar-style" content="translucent" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes"  />
+        <meta name="apple-mobile-web-app-status-bar-style" content="translucent" />
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-
-<!--         <link rel="logo" type="image/svg" href="css/assets/logo.svg"> -->
-        <link rel="icon" type="image/png" href="css/assets/logo.png">
-        <link rel="shortcut icon"         href="css/assets/logo.png">
-        <link rel="apple-touch-icon"      href="css/assets/logo.png">
 
         <title>Track Authority Music</title>
 
         <!--(if target dev)><!-->
         <link rel="stylesheet/less" type="text/css" href="style.less" >
-        <link rel="stylesheet/less" type="text/css" href="css/featured.min.css">
+		<link rel="stylesheet/less" type="text/css" href="css/challenge-block.css">
         <link rel="stylesheet/less" type="text/css" href="css/supersprite.min.css">
-        <link rel="stylesheet/less" type="text/css" href="css/form.min.css">
         <!--<!(endif)-->
 
         <!--(if target build)>
@@ -40,7 +48,6 @@
     </head>
     <body>
         <solarizd-app></solarizd-app>
-
         <!--(if target dev)><!-->
         <script type="text/javascript">
             less = {
@@ -50,7 +57,6 @@
         <script src="vendor/prefixfree/prefixfree.min.js"></script>
         <script src="vendor/less.js/dist/less.js"></script>
         <!--<!(endif)-->
-
         <script src="app.browser.js"></script>
     </body>
 </html>

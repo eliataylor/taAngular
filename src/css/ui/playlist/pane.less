@@ -1,18 +1,6 @@
 @import "../../vars/all";
 @import "../kit/search-input";
 
-#challengeSelector {
-        width:100%;
-        margin-bottom:10px;
-        height:2em;
-        font-size:1em;
-        font-weight:bolder;
-        background:#F2F2F2;
-}
-.action.clear { clear:none!important; }
-.innerPane { position:relative;   height: 100%;
-  overflow: scroll; }
-
 .mixin-playlist-pane () {
     @border-color:@purple-light;
     background:@theme-background;
@@ -58,20 +46,20 @@
         }
     }
 
-    @indices-width:@column / 3;
+    @indices-width:@column / 4;
 
     .playlist-actions {
         .flexed(0);
         .flexbox(@justify:flex-start;@align:stretch);
         flex-wrap:wrap;
-        height:4rem;
+        height:3rem;
         align-items:center;
 
         &> .action {
             .flexed(0);
             .flexbox(@align:center);
             cursor:pointer;
-            margin-right:@column-pad;
+            margin-right:@tight-pad;
             text-transform:uppercase;
 
             &.clear:before {
@@ -96,7 +84,7 @@
             }
 
             &:not(:first-child) {
-                margin-left:@column-pad;
+                margin-left:@tight-pad;
             }
 
             &:hover .text {

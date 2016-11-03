@@ -31,6 +31,10 @@
                 ng-click="actions.repeat()">
             <span class="text">Repeat</span>
         </li>
+        <li ng-if="challenge.challenge_status == 'challenge'" class="action stop-here" ng-class="{'active': submitToTa}"
+                ng-click="actions.submitToTa()">
+            <span class="text">Add to Challenge</span>
+        </li>        
     </ul>
 <!--<li ng-class="{'now-playing': nowPlaying, 'active': isActive, 'loading':
                 isBuffering, 'actions-open': displayActions}">

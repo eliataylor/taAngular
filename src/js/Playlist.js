@@ -6,30 +6,6 @@ import './Services';
 import 'angular';
 import 'angular-ui-sortable';
 
-Date.prototype.getMonthStr = function() {
-    if (this.getMonth()==0)return "Jan";
-    if (this.getMonth()==1)return "Feb";
-    if (this.getMonth()==2)return "Mar";
-    if (this.getMonth()==3)return "Apr";
-    if (this.getMonth()==4)return "May";
-    if (this.getMonth()==5)return "Jun";
-    if (this.getMonth()==6)return "Jul";
-    if (this.getMonth()==7)return "Aug";
-    if (this.getMonth()==8)return "Sept";
-    if (this.getMonth()==9)return "Oct";
-    if (this.getMonth()==10)return "Nov";
-    if (this.getMonth()==11)return "Dec";
-};
-Date.prototype.getDayStr = function() {
-    if (this.getDay()==0)return "Sun";
-    if (this.getDay()==1)return "Mon";
-    if (this.getDay()==2)return "Tue";
-    if (this.getDay()==3)return "Wed";
-    if (this.getDay()==4)return "Thur";
-    if (this.getDay()==5)return "Fri";
-    if (this.getDay()==6)return "Sat";
-};
-
 function mouseCoords(event) {
     var totalOffsetX = 0,
         totalOffsetY = 0,
@@ -62,7 +38,7 @@ export default angular.module('ui.playlist',
             restrict: 'E',
             templateUrl: '/html/playlist/pane.html',
             replace: true,
-            scope: true,
+            scope : true,
             link: function($scope, $element, $attrs) {
                 var media = window.matchMedia('(max-width:1280px),(max-device-width:1280px)');
                 
@@ -82,32 +58,6 @@ export default angular.module('ui.playlist',
                     $scope.authData = authData;
                 });
                 
-                taAPI.getChallenges().then(function(response) {
-                	if (typeof response.error != 'undefined') {
-                        $rootScope.$broadcast('app::confirm', {
-                            title: 'Login',
-                            confirmOnly: false,
-                            onConfirm: () => {
-                                $window.location.href='https://trackauthoritymusic.com';
-                            },
-                            html: `<a href="https://trackauthoritymusic.com" target="_blank">Login</a> to access Challenge playlists`
-                        });
-	                } else if (typeof response.popBody == 'object') {
-	                    $scope.challenges = response.popBody; // updates select
-	                	var q = $scope.$$prevSibling.query;
-	                    $timeout(()=>{
-	                    	for(var i in $scope.challenges) {
-	                    		if (q === $scope.challenges[i].challenge_title ||
-	                    		    (q.length < 1  && parseInt($scope.challenges[i].challenge_id) > 0)) {
-	                            	$scope.selectedChallengeItem = $scope.challenges[i];
-	                            	$scope.getTAplaylist();
-	                            	return false;
-	                            }                        		
-	                    	}
-	                    });
-	                }
-                });
-
                 $scope.publishPlaylist = () => {
                     playList.publishPlaylist().then((refKey) => {
                     	console.log('Playlist.js: publishPlaylist');
@@ -194,26 +144,7 @@ export default angular.module('ui.playlist',
                         return idx;
                     },
                     uploadPlaylist () {
-                        solBackend.savePlaylist(
-                            this.metadata, this.items);
-                    },                       
-                    getTAplaylist () {
-                    	$scope.cid = parseInt($scope.selectedChallengeItem.challenge_id);
-                    	$scope.$$prevSibling.query = $scope.$$prevSibling.query = $scope.selectedChallengeItem.challenge_title;
-                    	if ($scope.cid > 0) {
-                    		playList.clearList();
-                            $location.search('playlist', null);
-	                    	taAPI.getTAplaylist($scope.cid).then(function(challenge){	                    		
-	                    		$scope.challenge = challenge;
-	                        	document.getElementById('challengeBlock').style.display = "block";
-	                        	angular.forEach(challenge.tracks, function(track, key) {
-	                                    this.playlist.splice(this.playlist.length, 0, this.formatItem(track));
-	                        		}, playList);
-                    			playList.saveList();
-	                    	});
-                    	} else {
-                        	document.getElementById('challengeBlock').style.display = "none";                    		
-                    	}
+                        solBackend.savePlaylist(this.metadata, this.items);
                     },
                     changeBackground () {
                         let nowPlayingIdx = playList.getNowPlayingIdx();
@@ -282,16 +213,11 @@ export default angular.module('ui.playlist',
                 };
             },
             controller: function($scope, $element, $attrs, $transclude) {
-                $scope.challenges = null;
-                $scope.challenge = null;
-                $scope.selectedChallengeItem=null;
-                $scope.cid = null;
                 $scope.items = playList.playlist;
                 $scope.$watch(() => playList.metadata, (newVal, oldVal) => {
                     if (!!newVal) {
                         newVal.$bindTo($scope, "metadata");
-                    }
-                    else {
+                    } else {
                         $scope.metadata = null;
                     }
 
@@ -304,36 +230,6 @@ export default angular.module('ui.playlist',
                 	console.log('Playlist.js: savingPlaylist');
                     playList.save();
                 };
-                
-                $scope.fDate = function(str, f){
-                    if (typeof str == "string" && str != "") str = parseInt(str);
-                    var d = new Date(str * 1000);
-                    return d.getDayStr() + ". " + d.getMonthStr() + " " + d.getDate() + ", " + d.getFullYear();            
-                },
-                $scope.getUserName  = function(uid, users) {
-                	for(var i in users){
-                		if (users[i].user_id == uid) {
-                			return users[i].user_screenname;
-                		}
-                	}
-                	return 'anonymous';
-                };   
-                $scope.getUserPic = function(uid, users) {
-                	var user = false, path = false;
-                	for(var i in users){
-                		if (users[i].user_id == uid) {
-                			user = users[i];
-                			break;
-                		}
-                	}
-                	if (!user) return path;
-                    if (typeof user['group_user_headshot'] == 'string') {
-                        return user['group_user_headshot'];
-                    } else if (typeof user['user_headshot'] == 'string') {
-                        return user['user_headshot'];            
-                    }
-                    return path;
-                }
             }
         };
 
@@ -361,16 +257,4 @@ export default angular.module('ui.playlist',
         };
 
         return definitions;
-    }]).directive('challengeBlock', function ($compile) {
-        var definitions = {
-                restrict: 'E',
-                templateUrl: '/html/playlist/challengeBlock.html',
-                replace: true,
-                scope: true,
-                transclude:true,
-                link: function($scope, $element, $attrs) {
-                    $compile($element.contents())(scope);
-                }
-            };
-            return definitions;
-        });
+    }]);

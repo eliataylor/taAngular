@@ -20,10 +20,6 @@ menu {
 html {
     font-family:"Roboto", sans-serif;
     font-size:@root-font-size;
-
-    @media (max-device-width: 1280px) {
-        font-size:(@root-font-size * 2);
-    }
 }
 
 html, body {
@@ -101,10 +97,10 @@ body {
 }
 
 section.wrapper > *{
-overflow:auto!important;
-overflow-y:auto!important;
-overflow-x:hidden!important;
-height:100%!important; 
+	overflow:auto!important;
+	overflow-y:auto!important;
+	overflow-x:hidden!important;
+	height:auto; 
 }
 
 [tab-id="search-pane"] {
@@ -132,9 +128,6 @@ height:100%!important;
     .flexed(1);
     .mixin-playlist-pane;
     .transition(@easing:ease-out; @duration:.4s);
-    overflow:auto;
-    overflow-y:auto!important;
-    height:100%!important;
 }
 
 #footer {

@@ -1,82 +1,110 @@
-<div id="challengeBlock" class="moduleBlock {{challenge.challenge_status}}" >
-	<div id="groupItem-cid-{{challenge.challenge_id}}" class="listViewItem" data-gid="{{challenge.group_id}}"
-		data-cid="{{challenge.challenge_id}}" data-status="{{challenge.challenge_status}}"
+<div id="challengeBlock" class="moduleBlock {{challenge.challenge_status}}">
+	<div data-gid="{{challenge.group_id}}"
+		data-cid="{{challenge.challenge_id}}"
+		data-status="{{challenge.challenge_status}}"
 		data-title="{{challenge.challenge_title}}">
-		<div class="subhead_area" style="background:#111; padding:10px 0 8px 4px; margin: 0px 0 20px 0;vertical-align: middle;">
-			<h3 class="subheading" >
-				<span class="lineImg tmmss calendar"></span>            
-	            <span ng-if="!challenge.challenge_uploading_starts" class="lime">
-	            	unscheduled &amp; unsponsored</span>
-	            <span ng-if="challenge.challenge_status == 'playlist'" class="lime">
-	            	list closes {{fDate(challenge.challenge_uploading_ends)}}</span>
-	            <span ng-if="challenge.group_id == 3 && challenge.challenge_uploading_starts" class="lime">
-	            	Pool Deadline: {{fDate(challenge.challenge_uploading_starts)}}. Min. Cash Pool: $ {{challenge.challenge_minpool ? challenge.challenge_minpool : 125}}</span>
-	            <span ng-if="challenge.challenge_awarding_complete > 0" class="lime">
-	            	Won &amp; Awarded {{fDate(challenge.challenge_awarding_complete)}} by {{getUserName(challenge.challenge_winner_id, challenge.userids)}} </span>
+		<div class="subhead_area"
+			style="background: #111; padding: 10px 0 8px 4px; margin: 0px 0 20px 0; vertical-align: middle;">
+			<h3 class="subheading">
+				<span class="lineImg tmmss calendar"></span> <span
+					ng-if="!challenge.challenge_uploading_starts" class="lime">
+					unscheduled &amp; unsponsored</span> <span
+					ng-if="challenge.challenge_status == 'playlist'" class="lime">
+					list closes {{fDate(challenge.challenge_uploading_ends)}}</span> <span
+					ng-if="challenge.group_id == 3 && challenge.challenge_uploading_starts"
+					class="lime"> Pool Deadline:
+					{{fDate(challenge.challenge_uploading_starts)}}. Min. Cash Pool: $
+					{{challenge.challenge_minpool ? challenge.challenge_minpool : 125}}</span>
+				<span ng-if="challenge.challenge_awarding_complete > 0" class="lime">
+					Won &amp; Awarded {{fDate(challenge.challenge_awarding_complete)}}
+					by {{getUserName(challenge.challenge_winner_id,
+					challenge.userids)}} </span>
 			</h3>
 		</div>
 
-		<div class="imgControlCol">
-			<a href="{{dataSources.assets}}/playlist?cid={{challenge.challenge_id}}"> 
-			<img align="left" class="largeImg" ng-src="{{dataSources.assets + challenge.challenge_image}}" />
-			</a>
-			<div class="btnBox">
-
-				<a ng-if="challenge.challenge_status == 'playlist'" 
-					class="bigBtn cdMusicBig" data-name="cdMusic"
-					data-params="{{challenge.challenge_id}}"
-					href="{{dataSources.api}}/forms/track-loader?cid={{challenge.challenge_id}}">
-					<div class="imgBg cdMusic"></div>
-					<div class="midX">Upload An Track</div>
-					<div class="rightBg"></div>
-				</a>
-				
-				<a 
-					ng-if="!challenge.challenge_uploading_starts" 
-					class="bigBtn presentBoxMiniBig" data-name="presentBoxMini"
-					data-params="{{challenge.challenge_id}}"
-					href="{{dataSources.api}}/forms/sponsor-app?cid={{challenge.challenge_id}}">
-					<div class="imgBg presentBoxMini"></div>
-					<div class="midX">Sponsor This Challenge</div>
-					<div class="rightBg"></div>
-				</a>
-
-			</div>
-
-			<div class="btnBox">
-				<div class="starHolder bigStarHolder" data-cid="{{challenge.challenge_id}}"
-					data-status="{{challenge.challenge_status}}" title="100">
-					<div class="bigStarShadowPad">
-						<span data-cid="{{challenge.challenge_id}}" class="starFill starGreen" style="width:{{challenge.challenge_rating_avg > 0 ? challenge.challenge_rating_avg : 0}}%;"></span>
-						<span class="starFill starFocus" style="width: 100%"></span>
-					</div>
-					<div class="tmmss bigRaterMask"></div>
+		<div class="bigBox">
+			<div class="bigGridMask">
+				<div class="bigGridImg">
+					<a
+						target="_blank"
+						href="{{dataSources.api}}/playlist?cid={{challenge.challenge_id}}">
+						<img ng-src="{{dataSources.assets + challenge.challenge_image}}" />
+					</a>
 				</div>
-				<span class="cRateContext">Avg. <em class="lime">{{challenge.challenge_rating_avg > 0 ? challenge.challenge_rating_avg : 0}}%</em></span>
 			</div>
 		</div>
 
-		<div class="listViewInfo">
+		<div class="btnBox">
 
-			<h3>{{challenge.challenge_title}}</h3>
+			<a ng-if="challenge.challenge_status == 'playlist'"
+				class="bigBtn cdMusicBig" data-name="cdMusic"
+				data-params="{{challenge.challenge_id}}"
+				target="_blank"
+				href="{{dataSources.api}}/forms/track-loader?cid={{challenge.challenge_id}}">
+				<div class="imgBg cdMusic"></div>
+				<div class="midX">Upload An Track</div>
+				<div class="rightBg"></div>
+			</a>
 
-			<!-- pre-wrap whitespace requires one line php -->
-			<div class="summary">
-				<a class="headshotLink" href="{{dataSources.api}}/members/profile/{{challenge.challenge_author_id}}"><img
-					class="smImg"
-					src="{{getUserPic(challenge.challenge_author_id, challenge.userids)}}"
-					align="left"></a>
-					{{challenge.challenge_summary}} <span class="miniText">(upload up to {{challenge.challenge_tracks_per_user}} tracks)</span>
+			<div ng-if="!challenge.challenge_uploading_starts">
+				<div class="starHolder bigStarHolder"
+					data-cid="{{challenge.challenge_id}}"
+					data-status="{{challenge.challenge_status}}">
+					<div class="bigStarShadowPad">
+						<span data-cid="{{challenge.challenge_id}}"
+							class="starFill starGreen"
+							style="width: {{challenge.challenge_rating_avg"></span> <span
+							class="starFill starFocus" style="width: 0;"></span>
+					</div>
+					<div class="tmmss bigRaterMask"></div>
+				</div>
+				<div class="cRateBox">
+					<div style="font-size: 27px;" class="rating_avg">{{challenge.challenge_rating_avg}}%</div>
+				</div>
 			</div>
 
+			<a ng-if="!challenge.challenge_uploading_starts"
+				class="bigBtn presentBoxMiniBig" data-name="presentBoxMini"
+				data-params="{{challenge.challenge_id}}"
+				target="_blank"
+				href="{{dataSources.api}}/forms/sponsor-app?cid={{challenge.challenge_id}}">
+				<div class="imgBg presentBoxMini"></div>
+				<div class="midX">Sponsor This Challenge</div>
+				<div class="rightBg"></div>
+			</a>
+
+		</div>
+
+		<div class="gridInfo">
 			<div class="authors">
-				<span class="author"><span class="tmmss authorIcon lineImg"></span>
-					Author, <a class="screenname" href="{{dataSources.api}}/members/profile/{{challenge.challenge_author_id}}">
-						{{getUserName(challenge.challenge_author_id, challenge.userids)}}</a>. </span>
+				<p class="author">
+					<span class="iconColumn"> <span data-type="user"
+						data-uid="{{challenge.challenge_author_id}}"
+						class="popInfo tmmss authorIcon lineImg"></span>
+					</span> Author, <a class="screenname"
+						target="_blank"
+						href="{{dataSources.api}}/members/profile/{{challenge.challenge_author_id}}">
+						{{getUserName(challenge.challenge_author_id, challenge.userids)}}</a>
+				</p>
+			</div>
+
+			<div class="summary">
+				<a class="headshotLink"
+					target="_blank"
+					href="{{dataSources.api}}/members/profile/{{challenge.challenge_author_id}}"><img
+					class="smImg"
+					src="{{getUserPic(challenge.challenge_author_id, challenge.userids)}}"
+					align="left"></a> {{challenge.challenge_summary}} <span
+					class="miniText">(upload up to
+					{{challenge.challenge_tracks_per_user}} tracks)</span>
 			</div>
 
 			<div class="awards"></div>
 			<div class="clearer"></div>
+
 		</div>
+
+
 	</div>
+	<!-- GRIDBLCOK ENDS -->
 </div>

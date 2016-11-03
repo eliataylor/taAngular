@@ -7,6 +7,7 @@ import YoutubeAPI from './services/youtube-api';
 import taAPI from './services/ta-api';
 import YoutubePlayer from './services/youtube-player';
 import 'angular';
+
 export default angular.module('services', ['sol-backend', 'api-key'])
     .service('echoNestAPI', EchoNest)
     .service('lastfm', lastfm)
