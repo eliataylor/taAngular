@@ -1,26 +1,23 @@
-<main id="main-app">
+<main id="main-app" >
 	<div style="display:none">
 	    <input type="text" value="{{dataSources.assets}}" ng-model="dataSources.assets" />
 	    <input type="text" value="{{dataSources.api}}" ng-model="dataSources.api" />
 	    <input type="text" value="{{dataSources.angular}}" ng-model="dataSources.angular" />
     </div>
-    <sol-tabs id="main-view" selected="{{defaultTab}}">
-    
+    <sol-tabs id="main-view" data-loggedin="{{isAuthenticated}}" selected="{{defaultTab}}">
     	<ambiance-pane
-			ng-if="authenticated"
+    		ng-ig="isAuthenticated"
+    		tab-authenticated="{{isAuthenticated}}"
     	    tab-id="ambiance-pane"
             tab-title="Ambiance"
             tab-icon="ambiance" ></ambiance-pane>
-		
     	<user-login
+    		ng-ig="!isAuthenticated"
+    		tab-authenticated="{{isAuthenticated}}"
     	    tab-id="user-login"
-            tab-title="Login/Register"
+            tab-title="Login"
             tab-icon="login" ></user-login>
             
-        <search-pane
-            tab-id="search-pane"
-            tab-title="Search"
-            tab-icon="search"></search-pane>
         <playlist-pane
             tab-id="playlist-pane"
             tab-title="Playlist"

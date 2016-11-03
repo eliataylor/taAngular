@@ -63,6 +63,19 @@ export default angular.module('Application', [
                 $scope.defaultTab = 0;
             }
             
+        	$scope.currentUser = false;
+//        	$scope.userRoles = USER_ROLES;
+        	//$scope.isAuthorized = AuthService.isAuthorized(USER_ROLES);
+        	$scope.isAuthenticated = false; // AuthService.isAuthenticated();
+//        	console.log('is Authneticated: ', $scope.isAuthenticated);
+        	$scope.setCurrentUser = function (user) {
+        		console.log("setting global user", user);
+        		$scope.currentUser = user;
+        		if (user.user_id) {
+        			$scope.isAuthenticated = user.user_status;
+        		}
+        	};
+            
             ApiKey.fetchKeys().then(function() {
                 $element[0].classList.add('loaded');
             });
@@ -83,8 +96,7 @@ export default angular.module('Application', [
 	        }
 	    }   
     };
-}]);
-
+}])
 //.config(["$httpProvider", function($httpProvider) {
 //	//$httpProvider.defaults.withCredentials = true;
 //	$httpProvider.defaults.headers.common['Access-Control-Allow-Credentials'] = true; 
@@ -92,11 +104,10 @@ export default angular.module('Application', [
 //}]).factory('middleware', function() {
 //    return {
 //        request: function(config) {
-//        	if (config.url.indexOf("/html") !== 0) {
+//        	if (config.url.indexOf("http") !== 0) {
 //                config.url = "https://example.com/api/" + config.url;
 //        	}
 //        	return config.url;
 //        }
 //    };
 //});
-;

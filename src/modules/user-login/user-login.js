@@ -1,14 +1,13 @@
 import 'angular';
 
-var app = angular.module('user-login', 
-		['sol-backend', 'services'])
+var app = angular.module('user-login', ['sol-backend', 'services'])
 .constant('AUTH_EVENTS', {
-	  loginSuccess: 'auth-login-success',
-	  loginFailed: 'auth-login-failed',
-	  logoutSuccess: 'auth-logout-success',
-	  sessionTimeout: 'auth-session-timeout',
-	  notAuthenticated: 'auth-not-authenticated',
-	  notAuthorized: 'auth-not-authorized'
+  loginSuccess: 'auth-login-success',
+  loginFailed: 'auth-login-failed',
+  logoutSuccess: 'auth-logout-success',
+  sessionTimeout: 'auth-session-timeout',
+  notAuthenticated: 'auth-not-authenticated',
+  notAuthorized: 'auth-not-authorized'
 })
 .constant('USER_ROLES', {
   all: '*',
@@ -25,25 +24,29 @@ var app = angular.module('user-login',
     replace: true,
     scope: true,
     link: function ($scope, element, attrs) {
-      var showDialog = function () {
-        $scope.visible = true;
-      };
-            
-	  console.log('loginForm Directive: ', AUTH_EVENTS);
+	  console.log('userLogin Directive: ', AUTH_EVENTS, $scope.isAuthenticated);
+	  
 	  
 	  var cookie = false;
 	  var value = "; " + document.cookie;
 	  var parts = value.split("; " + 'tacsession' + "=");
 	  if (parts.length == 2) cookie = parts.pop().split(";").shift();
-	  console.log('cookie', cookie);
-	  
+	  //console.log('cookie', cookie);
+	  if (cookie.length > 10) {
+		  $http.get('https://localhost.trackauthoritymusic.com/json/getme')
+		  .then(function(res) {
+			  if (res.data.error) {
+				  console.log('tacsession failed', res.data.error);
+			  } else if (res.data.user_id){
+				  $scope.setCurrentUser(res.data);				 
+			  }
+		  }, 
+		    function(response) { // optional
+		        console.log('cookie rejected', response);
+		  });
+	  }
 	  // /json/getme > IF VALID set, ELSE reject 
 	  // google-signing
-	  
-      $scope.visible = false;
-      $scope.$on(AUTH_EVENTS.notAuthenticated, showDialog);
-      $scope.$on(AUTH_EVENTS.sessionTimeout, showDialog)
-            
       $scope.toggleGoogleAuth = () => {
           if (!$scope.authenticated)
               solBackend.authenticateWithPopup();
@@ -69,26 +72,66 @@ var app = angular.module('user-login',
   var authService = {};
  
   authService.login = function (credentials) {
-    return $http
-      .post('https://localhost.trackauthoritymusic.com/manage/users/login?tar=doAjax', credentials)
-      .then(function (res) {
-        Session.create(res.data);
-        return res.data;
-      });
+	  
+
+	  function serializeParams(obj) {
+	    var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
+	      
+	    for(name in obj) {
+	      value = obj[name];
+	        
+	      if(value instanceof Array) {
+	        for(i=0; i<value.length; ++i) {
+	          subValue = value[i];
+	          fullSubName = name + '[' + i + ']';
+	          innerObj = {};
+	          innerObj[fullSubName] = subValue;
+	          query += param(innerObj) + '&';
+	        }
+	      }
+	      else if(value instanceof Object) {
+	        for(subName in value) {
+	          subValue = value[subName];
+	          fullSubName = name + '[' + subName + ']';
+	          innerObj = {};
+	          innerObj[fullSubName] = subValue;
+	          query += param(innerObj) + '&';
+	        }
+	      }
+	      else if(value !== undefined && value !== null)
+	        query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+	    }
+	      
+	    return query.length ? query.substr(0, query.length - 1) : query;
+	  };
+	//$http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+	return $http({
+        url: 'https://localhost.trackauthoritymusic.com/manage/users/login?tar=doAjax',
+        method: "POST",
+        dataType: 'json',
+        data: serializeParams(credentials),
+        headers: {
+            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+    })
+    .then(function(res) {
+	        Session.create(res.data);
+	        return res.data;
+	    }, 
+	    function(response) { // optional
+	        console.log(response);
+	    });
   };
  
   authService.isAuthenticated = function () {
+	console.log('checking isAuthenticated', Session);
     return Session.user_id < 1;
   };
  
-  authService.isAuthorized = function (authorizedRoles) {
-    if (!angular.isArray(authorizedRoles)) {
-      authorizedRoles = [authorizedRoles];
-    }
-    return (authService.isAuthenticated() &&
-      authorizedRoles.indexOf(Session.user_status) > 2);
+  authService.isAuthorized = function (role) {
+    console.log('question isAuthorized: ' + role, USER_ROLES);
+    return (authService.isAuthenticated() && typeof USER_ROLES[role] == 'object' && USER_ROLES[role] > 2);
   };
- 
   return authService;
 })
 .factory('AuthResolver', function ($q, $rootScope, $state) {
@@ -96,8 +139,10 @@ var app = angular.module('user-login',
     resolve: function () {
       var deferred = $q.defer();
       var unwatch = $rootScope.$watch('currentUser', function (currentUser) {
+       	console.log('watching currentUser ', currentUser);
         if (angular.isDefined(currentUser)) {
           if (currentUser) {
+        	console.log('currentUser defined');
             deferred.resolve(currentUser);
           } else {
             deferred.reject();
@@ -129,7 +174,7 @@ var app = angular.module('user-login',
 	    password: ''
 	  };
 	  $scope.login = function (credentials) {
-		console.log('sending credentials: ', $scope.credentials);
+		console.log('Sending credentials: ', $scope.credentials);
 	    AuthService.login(credentials).then(function (user) {
 	      $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
 	      $scope.setCurrentUser(user);
@@ -181,23 +226,16 @@ var app = angular.module('user-login',
 });
 
 app.run(function ($rootScope, AUTH_EVENTS, AuthService) {
-	  console.log(' RUNNING USER-LOGIN: ', AUTH_EVENTS);
-	  $rootScope.$on('$stateChangeStart', function (event, next) {
-	    var authorizedRoles = next.data.authorizedRoles;
-	    if (!AuthService.isAuthorized(authorizedRoles)) {
-	      event.preventDefault();
-	      if (AuthService.isAuthenticated()) {
-	        // user is not allowed
-	      	console.log('NOT AUTHORIZED: ' + AUTH_EVENTS.notAuthenticated);
-	        $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
-	      } else {
-	        // user is not logged in
-	    	console.log('NOT AUTHENTICATED: ' + AUTH_EVENTS.notAuthenticated);
-	        $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-	      }
-	    }
-	  });
-	});
+  console.log('RUNNING USER-LOGIN: ', AUTH_EVENTS);
+  $rootScope.$on('$stateChangeStart', function (event, next) {
+	console.log('state change start', next.data);
+    if (!AuthService.isAuthenticated()) {
+      event.preventDefault();
+	  console.log('NOT AUTHENTICATED: ' + AUTH_EVENTS.notAuthenticated);
+      $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+    }
+  });
+});
 
 
 export default app;
