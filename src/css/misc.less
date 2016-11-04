@@ -31,16 +31,7 @@ html, body {
     overflow:hidden;
 }
 
-/*body:before {*/
-    /*content:"";*/
-    /*background:url('css/assets/background.svg');*/
-    /*position:absolute;*/
-    /*top:0; left:0;*/
-    /*width:100%; height:100%;*/
-    /*-webkit-filter:blur(20px);*/
-/*}*/
 body {
-    /*background:linear-gradient(to bottom, @indigo, @indigo (4 * @row), @base00, @indigo (2 * @row));*/
     background:@theme-app-background;
 
     &:before, &:after {
@@ -74,19 +65,6 @@ body {
     }
 }
 
-.floating-card {
-    border:solid @thin-border @inactive-text-dark;
-    box-shadow:0px 3px 3px -1px @shadow-color;
-    margin:@row-pad @column-pad;
-
-    @media (max-width: 1280px) {
-        margin:@row-pad @column-pad;
-    }
-
-    @media (max-width: 1080px) {
-        margin:0;
-    }
-}
 #topbar {
     .mixin-topbar;
 }
@@ -96,13 +74,6 @@ body {
     overflow:hidden;
 }
 
-section.wrapper > *{
-	overflow:auto!important;
-	overflow-y:auto!important;
-	overflow-x:hidden!important;
-	height:auto; 
-}
-
 [tab-id="search-pane"] {
     .flexed(0);
     .mixin-search-pane;
@@ -110,9 +81,8 @@ section.wrapper > *{
     @delay:.4s);
     z-index:2;
     box-shadow:3px 0px 3px -1px @shadow-color;
-    border:solid @thin-border @inactive-text-dark;
 
-    @media (max-width: 1280px) {
+    @media @media-mobile {
         margin:0;
         box-shadow:none;
         background:@white;
@@ -137,29 +107,32 @@ section.wrapper > *{
     right:0;
     z-index:10;
 
-    @media (max-width: 1280px), (max-device-width: 1280px) {
+    @media @media-not-desktop {
         flex-direction:row-reverse;
         position:relative;
         background:@purple;
-        border-top:solid @row-pad @purple-light;
 
         .google-signin {
             margin:0;
         }
     }
+
+    @media  @media-mobile  {
+        display:none;
+    }
 }
 
 #main-view.sol-tabs {
-    background:@purple;
     color:@active-text-light;
 
     &> .tabs {
+        background:@purple;
         box-shadow:0px 3px 10px @shadow-color;
         z-index:2;
     }
 }
 
-@media (min-width: 1280px) {
+@media @media-desktop {
     #main-view.sol-tabs {
         &> .tabs {
             display:none;
@@ -192,13 +165,7 @@ section.wrapper > *{
     }
 }
 
-@media (min-device-aspect-ratio: 16/9) {
-    html {
-        font-size:@root-font-size;
-    }
-}
-
-@media (max-height: 600px) {
+@media @media-mobile-keyboard {
     #topbar, #footer {
         display:none;
     }

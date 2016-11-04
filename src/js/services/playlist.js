@@ -9,7 +9,6 @@ export default [
     '$location',
     'youtubePlayer',
     'youtubeAPI',
-    'taAPI',
     'playListVolume',
     'solBackend',
     '$rootScope',
@@ -19,7 +18,6 @@ export default [
         $location,
         ytPlayer,
         ytAPI,
-        taAPI,
         playListVolume,
         solBackend,
         $rootScope
@@ -133,26 +131,9 @@ export default [
         }
     });
 
-    function getTAplaylist (cid) {
-    	$scope.cid = parseInt($scope.selectedChallengeItem.challenge_id);
-    	$scope.$$prevSibling.query = $scope.$$prevSibling.query = $scope.selectedChallengeItem.challenge_title;
-    	if ($scope.cid > 0) {
-    		playList.clearList();
-            $location.search('playlist', null);
-        	taAPI.getTAplaylist($scope.cid).then(function(challenge){	                    		
-        		$scope.challenge = challenge;
-            	document.getElementById('challengeBlock').style.display = "block";
-            	angular.forEach(challenge.tracks, function(track, key) {
-                        this.playlist.splice(this.playlist.length, 0, this.formatItem(track));
-            		}, playList);
-    			playList.saveList();
-        	});
-    	} else {
-        	document.getElementById('challengeBlock').style.display = "none";                    		
-    	}
-    }
-    
+    let latestFirebaseWatch;
     function getSavedList() {
+        if (latestFirebaseWatch) latestFirebaseWatch();
         return $q((resolve, reject) => {
             let hash = window.location.hash;
             let hashMatches = hash.match(/#.*?&?playlist=(.*)&?/);
@@ -169,6 +150,13 @@ export default [
         }).then((playlistId) => {
             solBackend.fetchPlaylistMetadata(playlistId).then((playlistRef) => {
                 that.metadata = playlistRef;
+            });
+            solBackend.fetchPlaylist(playlistId).then(($record) => {
+                latestFirebaseWatch = $record.$watch(() => {
+                    solBackend.getPlaylistData(playlistId).then(playlist => {
+                        that.setPlaylist(playlist);
+                    });
+                });
             });
             return solBackend.getPlaylistData(playlistId);
         }).catch(() => {
@@ -223,11 +211,18 @@ export default [
     }
 
     this.saveList = function(name) {
-        if (hasLS) {
+        if (this.remoteControl) return; // do not save in case of remote-control
+
+        if (!this.metadata && hasLS) {
             if (typeof name !== 'string')
                 name = 'playlist';
             localStorage[name] = JSON.stringify(that.playlist);
         }
+
+        if (this.metadata) {
+            solBackend.savePlaylist(this.metadata, this.playlist);
+        }
+
         syncClients();
     };
 
@@ -238,51 +233,26 @@ export default [
         this.metadata = null;
         this.saveList();
     };
-    
-    this.getYoutubeId = function(url){
-        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-        var match = url.match(regExp);
-        return (match&&match[7].length==11)? match[7] : false;
-    };
-    
-    this.formatItem = function (item) { 
-    	console.log("FORMATTING TRACK", item);
-        let newItem = {};
-    	if (typeof item.track_id != 'undefined') {
-        	// conditional for TA too
-    		newItem.contentDetails = item;
-    		newItem.contentDetails.duration = 180; // wrong   		
-    		newItem.id = this.getYoutubeId(item.track_youtube);
-    		if (!newItem.id) {
-    			newItem.id = "ta_" + item.track_id; // should never happen
-    			console.log('failed gettin youtube videoID', item);
-    		}
-    		newItem.snippet = {
-                    thumbnails: {
-                        default: {'url':item.track_image}
-                    },
-                    title: item.track_title
-                }
-    	} else {
-            newItem = {
-                contentDetails: {
-                    duration: item.contentDetails.duration
+
+    function formatItem (item) {
+        let newItem = {
+            contentDetails: {
+                duration: item.contentDetails.duration
+            },
+            id: item.id,
+            snippet: {
+                thumbnails: {
+                    default: item.snippet.thumbnails.default
                 },
-                id: item.id,
-                snippet: {
-                    thumbnails: {
-                        default: item.snippet.thumbnails.default
-                    },
-                    title: item.snippet.title
-                }
-            };
-    	}
+                title: item.snippet.title
+            }
+        };
 
         return newItem;
     }
 
     this.addItem = function(idx, item) {
-        item = this.formatItem(item);
+        item = formatItem(item);
         that.playlist.splice(idx, 0, item);
         this.saveList();
     };
@@ -318,41 +288,27 @@ export default [
         return nowPlaying;
     };
 
-    this.add = function(videoId, idx, source) {
+    this.add = function(videoId, idx) {
         var that = this;
-        if (!source || source == 'youtube') {
-            return ytAPI.getVideo(videoId).then(function(resp) {
-                	var item = resp.data.items[0],
-                    thumb = item.snippet.thumbnails.default.url,
-                    title = item.snippet.title,
-                    trimmed = title.length >= 30 ? title.substr(0, 27) + '...' :
-                    title,
-                    text = 'Track "' + trimmed + '" has been added to playlist';
 
-                that.addItem(idx, item);
-                if (that.playlist.length === 1 ||
-                    (idx === that.playlist.length - 1 && state === st.STOPPED))
-                    that.play(idx);
+        return ytAPI.getVideo(videoId).then(function(resp) {
+            var item = resp.data.items[0],
+                thumb = item.snippet.thumbnails.default.url,
+                title = item.snippet.title,
+                trimmed = title.length >= 30 ? title.substr(0, 27) + '...' :
+                title,
+                text = 'Track "' + trimmed + '" has been added to playlist';
 
-                $rootScope.$broadcast('toast::notify', {
-                    thumb: thumb,
-                    text: text
-                });
-            });        	
-        } else {
-            var item = videoId;
-        	if (idx < 0) idx = this.playlist.length;
-            that.addItem(idx, videoId); // videoId if full track object
-            if (that.playlist.length === 1 || (idx === that.playlist.length - 1 && state === st.STOPPED))
-                    that.play(idx);
+            that.addItem(idx, item);
+            if (that.playlist.length === 1 ||
+                (idx === that.playlist.length - 1 && state === st.STOPPED))
+                that.play(idx);
 
-        	var trimmed = item.track_title.length >= 30 ? item.track_title.substr(0, 27) + '...' : item.track_title;
-        	var text = 'Track "' + trimmed + '" has been added to playlist';
             $rootScope.$broadcast('toast::notify', {
-                thumb: item.track_image,
+                thumb: thumb,
                 text: text
-            }); 
-        }
+            });
+        });
     };
 
     this.addFirst = function(videoId) {
@@ -401,29 +357,23 @@ export default [
         var idx = typeof index === 'number' ? index : (nowPlaying || 0),
             videoId = this.playlist[idx].id;
 
-        if (videoId && videoId.indexOf('ta_') === 0) {
-        	var src = 'https://trackauthoritymusic.com' + this.playlist[idx].contentDetails.track_location;
-        	console.log('learn to play regular audio files: ' + src);
-        	console.log(this.playlist[idx]);
-        	return $rootScope.audioPlayer="<br /><audio controls><source src=\""+ src + "\" type=\"audio/mpeg\"> Your browser does not support the audio element. </audio>"
+
+        if (idx === nowPlaying && !force) {
+            sendActionToServer({
+                type: 'play'
+            });
+
+            return ytPlayer.play();
         } else {
-	        if (idx === nowPlaying && !force) {
-	            sendActionToServer({
-	                type: 'play'
-	            });
-	
-	            return ytPlayer.play();
-	        } else {
-	            return ytPlayer.loadVideo(videoId).then(function() {
-	                ytPlayer.play();
-	                setNowPlaying(idx);
-	
-	                sendActionToServer({
-	                    type: 'playByIndex',
-	                    index: nowPlaying
-	                });
-	            });
-	        }
+            return ytPlayer.loadVideo(videoId).then(function() {
+                ytPlayer.play();
+                setNowPlaying(idx);
+
+                sendActionToServer({
+                    type: 'playByIndex',
+                    index: nowPlaying
+                });
+            });
         }
     };
 
@@ -516,6 +466,10 @@ export default [
     };
 
     this.publishPlaylist = function () {
+        if (this.metadata) {
+            return $q.resolve(this.metadata.playlist);
+        }
+
         return solBackend.publishPlaylist(this.playlist, {
             name: `New Playlist (${(new Date()).toISOString().slice(0,10)})`
         }).then((refKey) => {
@@ -555,6 +509,17 @@ export default [
     function sendActionToServer (action) {
         $rootScope.$broadcast('peer::send_action_to_server', action);
     }
+
+    $rootScope.$on('peer::connected_to_server', () => {
+        this.remoteControl = true;
+    });
+
+    $rootScope.$on('peer::disconnected_from_server', () => {
+        this.remoteControl = false;
+        getSavedList().then((list) => {
+            that.setPlaylist(list);
+        });
+    });
 
     $rootScope.$on('peer::got_action_from_client', (e, action) => {
         $rootScope.$apply(() => {

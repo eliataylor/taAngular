@@ -1,10 +1,8 @@
 <aside ng-class="{ 'searching': searching }">
     <div class="sol-input-wrapper">
         <sol-input placeholder="Search on YouTube..."
-            value="query" data-source="youtube" icon="youtube"></sol-input>
+            value="query" icon="youtube"></sol-input>
     </div>
-    <search-result-list items="taItems"></search-result-list>
     <search-result-list items="items"></search-result-list>
     <search-result-albums albums="albums" ng-show="albums.length > 0 && items.length > 0"></search-result-albums>
-    <search-result-albums albums="taAlbums" ng-show="albums.length > 0 && items.length > 0"></search-result-albums>
 </aside>

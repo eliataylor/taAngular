@@ -1,4 +1,5 @@
-var basePath = 'https://www.googleapis.com/youtube/v3', maxResults = 50;
+var basePath = 'https://www.googleapis.com/youtube/v3',
+    maxResults = 50;
 
 export default ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
     var APIKEY = null;

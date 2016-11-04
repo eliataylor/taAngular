@@ -1,8 +1,8 @@
-<section class="playlist-pane" ng-class="{ 'active': !!items.length && ready }"
+<section class="playlist-pane"
+    ng-class="{ 'active': !!items.length && ready, 'search-focused': searchFocused }"
     ng-style="{'background-image': 'url(' + backgroundImg + ')'}"
     data-background="{{!!backgroundImg}}"
     sol-vibrate="currentlyDragging">
-    <div class="innerPane">
     <app-topbar id="topbar"></app-topbar>
     <playlist-progress data-progress="progress" duration="{{duration}}"></playlist-progress>
     <header class="playlist-actions">
@@ -11,24 +11,20 @@
             <span class="text" ng-show="shuffled">Shuffle is ON</span>
         </span>
 
-        <span class="action clearAngular" ng-click="clearPlaylist()">
-            <span class="text">Create Challenge</span>
+        <span class="action clear" ng-click="clearPlaylist()">
+            <span class="text">Clear Playlist</span>
         </span>
 
         <span class="action save" ng-click="publishPlaylist()">
-            <span class="text">Save Order</span>
-        </span>        
-        
+            <span class="text">Get Link</span>
+        </span>
     </header>
     <section class="playlist-statusline">
         <span class="playlist-title" ng-show="metadata">{{metadata.name || '-'}}</span>
 
         <sol-input placeholder="Search in playlist..."
+            on-focus="focusSearch()"
             value="query" icon="search" class="playlist-search"></sol-input>
-
-        <span class="playlist-save fa fa-upload"
-            ng-show="metadata && (metadata.uid === authData.uid)"
-            ng-click="uploadPlaylist()">SAVE</span>
     </section>
     <section class="playlist-wrapper" ng-class="{empty: items.length === 0}">
         <ul class="indices">
@@ -47,9 +43,7 @@
                 sol-slide-rm="items"
                 sol-slide-rm-handle=".title"
                 sol-slide-rm-after="savePlaylist(); $emit('closeTrackActions')"
-                data-challenge="{{$challenge}}"
                 data-index="{{$index}}"
-                data-tid="{{item.tid || -1}}"
                 data-title="{{item.snippet.title}}"
                 play-next="{{item.playNext || ''}}"
                 stop-here="{{item.stopHere || ''}}"
@@ -74,5 +68,4 @@
             <user-playlists></user-playlists>
         </sol-popmenu>
     </section>
-    </div>
 </section>

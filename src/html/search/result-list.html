@@ -1,10 +1,8 @@
 <ul class="result-list" sol-scroll2top="items">
     <search-result-item ng-repeat="item in items" class="result-item"
                         data-video-id="{{item.id}}"
-                        data-source="{{angular.isDefined(item.track_location) ? item.track_location : ''}}"
                         data-title="{{item.snippet.title}}"
                         data-thumbnail="{{item.snippet.thumbnails.default.url}}"
-                        data-description="{{item.snippet.description}}"
                         data-duration="{{item.duration}}"
                         >
     </search-result-item>

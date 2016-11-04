@@ -1,4 +1,4 @@
-<main id="main-app" >
+<main id="main-app">
     <sol-tabs id="main-view" data-loggedin="{{isAuthenticated}}" selected="{{defaultTab}}">
     	<ambiance-pane
     		ng-ig="isAuthenticated"
@@ -11,6 +11,10 @@
             tab-title="Login"
             tab-icon="login" ></user-login>
             
+        <search-pane
+            tab-id="search-pane"
+            tab-title="Search"
+            tab-icon="search"></search-pane>
         <playlist-pane
             tab-id="playlist-pane"
             tab-title="Playlist"

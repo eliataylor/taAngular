@@ -1,10 +1,6 @@
 <section class="media-panel" ng-class="{ cued: isCued }">
     <div class="media tab">
         <media-player id="media-player"></media-player>
-        <div id="audio-player">
-<!--         	<audio ng-src="{{audioSrc}}" id="audioPlayer" controls></audio> -->
-        	<div ng-bind-html-unsafe="audioPlayer"></div>
-        </div>
     </div>
 
     <playlist-related class="tab"></playlist-related>

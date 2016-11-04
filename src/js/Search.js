@@ -3,7 +3,7 @@ import './Services';
 import './Filters';
 import 'angular';
 export default angular.module('ui.search', ['services', 'filters', 'solScroll2top'])
-    .directive('searchPane', ['$timeout', 'youtubeAPI', 'taAPI', 'lastfm', function($timeout, youtubeAPI, taAPI, lastfm) {
+    .directive('searchPane', ['$timeout', 'youtubeAPI', 'lastfm', function($timeout, youtubeAPI, lastfm) {
         return {
             restrict: 'E',
             templateUrl: '/html/search/pane.html',
@@ -11,9 +11,8 @@ export default angular.module('ui.search', ['services', 'filters', 'solScroll2to
             scope: true,
             link: function($scope, $element, $attrs, $transclude) {
                 let lastSearch = null;
-                
-                $scope.query = '';    
-                
+
+                $scope.query = '';
                 $scope.search = (value) => {
                     if (lastSearch)
                         clearTimeout(lastSearch);
@@ -45,7 +44,7 @@ export default angular.module('ui.search', ['services', 'filters', 'solScroll2to
                 }
             }
         };
-    }]).directive('searchResultAlbums', ['$rootScope', 'youtubeAPI', 'taAPI', 'playList', 'lastfm', ($rootScope, youtubeAPI, taAPI, playList, lastfm) => {
+    }]).directive('searchResultAlbums', ['$rootScope', 'youtubeAPI', 'playList', 'lastfm', ($rootScope, youtubeAPI, playList, lastfm) => {
         return {
             restrict: 'E',
             templateUrl: '/html/search/albums-list.html',

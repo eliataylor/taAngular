@@ -7,7 +7,7 @@
     background:@theme-app-background;
     color:@active-text-dark;
 
-    @media (max-width:960px), (max-device-width:960px) {
+    @media @media-mobile {
         box-shadow:none;
     }
 
@@ -33,14 +33,16 @@
     }
 
     .sol-input-wrapper {
-        .flexed(0);
         .flexbox(@justify:stretch);
+        .floating;
+        flex:0 0 auto;
         height:@row;
-        padding:@row-pad @column-pad;
-        border-bottom:solid @thin-border @inactive-text-dark;
+        width:100%;
+        z-index:1;
 
         &> .sol-input {
             .flexed(1);
+            background:#fff;
         }
     }
 

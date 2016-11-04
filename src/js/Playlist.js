@@ -4,7 +4,16 @@ import './directives/sol-scroll2top';
 import '../modules/sol-backend/sol-backend';
 import './Services';
 import 'angular';
+import 'jquery-ui/ui/scroll-parent';
+import 'jquery-ui/ui/data';
+import 'jquery-ui/ui/widget';
+import 'jquery-ui/ui/widgets/mouse';
+import 'jquery-ui/ui/widgets/sortable';
 import 'angular-ui-sortable';
+import MobileDetect from 'mobile-detect';
+
+const _md = new MobileDetect(window.navigator.userAgent);
+const isMobile = _md.mobile() !== null;
 
 function mouseCoords(event) {
     var totalOffsetX = 0,
@@ -32,16 +41,16 @@ function mouseCoords(event) {
 export default angular.module('ui.playlist',
     ['sol-backend', 'services', 'filters', 'ui.sortable', 'solVibrate', 'solSlideRm', 'solScroll2top'])
     .directive('playlistPane', [
-            '$rootScope', '$window', '$timeout', '$http', '$location', 'youtubeAPI', 'taAPI', 'playList', 'solBackend', 'lastfm',
-            function($rootScope, $window, $timeout, $http, $location, youtubeAPI, taAPI, playList, solBackend, lastfm) {
+            '$rootScope', '$http', '$location', 'youtubeAPI', 'playList', 'solBackend', 'lastfm',
+            function($rootScope, $http, $location, youtubeAPI, playList, solBackend, lastfm) {
         var definitions = {
             restrict: 'E',
             templateUrl: '/html/playlist/pane.html',
             replace: true,
-            scope : true,
+            scope: true,
             link: function($scope, $element, $attrs) {
                 var media = window.matchMedia('(max-width:1280px),(max-device-width:1280px)');
-                
+
                 $scope.duration = 0;
                 $scope.progress = 0;
 
@@ -57,10 +66,9 @@ export default angular.module('ui.playlist',
                 solBackend.onAuth((authData) => {
                     $scope.authData = authData;
                 });
-                
+
                 $scope.publishPlaylist = () => {
                     playList.publishPlaylist().then((refKey) => {
-                    	console.log('Playlist.js: publishPlaylist');
                         let url = `${window.location.origin}/#playlist=${refKey}`;
                         $rootScope.$broadcast('app::confirm', {
                             title: 'Share URL',
@@ -75,7 +83,6 @@ export default angular.module('ui.playlist',
                 $scope.$watch(() => playList.isShuffled(), (newVal) => {
                     $scope.shuffled = newVal;
                 });
-                
                 $scope.toggleShuffle = () => {
                     playList.toggleShuffle();
                 };
@@ -131,6 +138,8 @@ export default angular.module('ui.playlist',
                 let backgroundSet = false;
 
                 Object.assign($scope, {
+                    searchFocused: false,
+
                     getCurrentlyOpenIdx: () => {
                         let idx = null;
 
@@ -142,9 +151,6 @@ export default angular.module('ui.playlist',
                         });
 
                         return idx;
-                    },
-                    uploadPlaylist () {
-                        solBackend.savePlaylist(this.metadata, this.items);
                     },
                     changeBackground () {
                         let nowPlayingIdx = playList.getNowPlayingIdx();
@@ -162,6 +168,26 @@ export default angular.module('ui.playlist',
                             });
                         }
                         else $scope.backgroundImg = '';
+                    },
+                    focusSearch () {
+                        this.searchFocused = true;
+                        let notInState = !history.state || !history.state.playlistSearch;
+
+                        if (isMobile && notInState) {
+                            history.pushState({ playlistSearch: true }, '');
+                        }
+                    }
+                });
+
+                window.addEventListener('popstate', (e) => {
+                    if (e.state && e.state.playlistSearch) {
+                        $scope.searchFocused = true;
+                        $scope.$digest();
+                    }
+                    else {
+                        $scope.searchFocused = false;
+                        $scope.query = '';
+                        $scope.$digest();
                     }
                 });
 
@@ -177,18 +203,16 @@ export default angular.module('ui.playlist',
 
                 $scope.$watch(playList.getProgress,
                     val => $scope.progress = val);
-                
+
                 $scope.sortableOpts = {
                     axis: 'y',
                     handle: '.mover',
                     start: function(e, ui) {
-                    	console.log('Playlist.js: sortableOpts start');                    	
                         $rootScope.$broadcast('closeTrackActions');
                         $scope.currentlyDragging = true;
                         if (!$scope.$$phase) $scope.$digest();
                     },
                     stop: function(e, ui) {
-                    	console.log('Playlist.js: sortableOpts stop');                    	
                         // Fix the playlist's currently playing track
                         var fromIdx = ui.item.sortable.index,
                             toIdx = ui.item.sortable.dropindex,
@@ -217,7 +241,8 @@ export default angular.module('ui.playlist',
                 $scope.$watch(() => playList.metadata, (newVal, oldVal) => {
                     if (!!newVal) {
                         newVal.$bindTo($scope, "metadata");
-                    } else {
+                    }
+                    else {
                         $scope.metadata = null;
                     }
 
@@ -225,9 +250,7 @@ export default angular.module('ui.playlist',
                         oldVal.$destroy();
                     }
                 });
-                
                 $scope.savePlaylist = function() {
-                	console.log('Playlist.js: savingPlaylist');
                     playList.save();
                 };
             }
@@ -246,6 +269,7 @@ export default angular.module('ui.playlist',
             link: function($scope, $element, $attrs) {
                 $element.on('click', function(e) {
                     var coords, time;
+
                     if (e.target.classList.contains('progress')) {
                         coords = mouseCoords(e);
                         time = $scope.duration * (coords.x / e.target.clientWidth);

@@ -1,10 +1,10 @@
 import 'angular';
+import services from '../../js/Services';
 
-export default angular.module('ambiance-pane', 
-	    ['sol-backend', 'services', 'filters'])
+export default angular.module('ambiance-pane', ['services'])
 	    .directive('ambiancePane',
-            ['$rootScope', '$window', '$timeout', '$http', '$location', 'youtubeAPI', 'taAPI', 'playList', 'solBackend',
-            ($rootScope, $window, $timeout, $http, $location, youtubeAPI, taAPI, playList, solBackend) => {
+        ['$rootScope', '$window', '$timeout', '$http', '$location', 'taApi', 'playList',
+        ($rootScope, $window, $timeout, $http, $location, taApi, playList) => {
     return {
         restrict: 'E',
         replace: true,
@@ -12,18 +12,6 @@ export default angular.module('ambiance-pane',
         scope: {},
         link: ($scope, $element) => {
         	console.log("AMBIANCE LINKED playList.playlist", playList.playlist, $scope.isAuthenticated);
-            Object.assign($scope, {
-                challenge_id:null,
-                active: false,
-                status: 'active',
-                users_count:0,
-                track_scount:0,
-                challenge_id:-1,
-                track_list:[],
-                track_order:{},
-                author_id:-1,
-                ta_id:-1
-            });
         }, 
         controller: function($scope, $element, $attrs) {
         	$scope.challenges = [{challenge_id:-1,challenge_title:"My custom playlist",group_id:-1}];
@@ -38,7 +26,7 @@ export default angular.module('ambiance-pane',
         	console.log('ambiance-pane knows isAuthenticated', $scope.isAuthenticated);
         	if (true || $scope.isAuthenticated) {
 
-                taAPI.getChallenges().then(function(response) {
+                taApi.getChallenges().then(function(response) {
                 	if (typeof response.popBody == 'object') {
                 		console.log('ALL CHALLENGES: ', response);
                         var options = response.popBody;
@@ -64,7 +52,7 @@ export default angular.module('ambiance-pane',
                                             	
                     	if ($scope.selectedChallengeItem.challenge_id > 0) {
                     		var cid = $scope.selectedChallengeItem.challenge_id;
-                    		taAPI.getTAplaylist(cid).then(function(response) {
+                    		taApi.getTAplaylist(cid).then(function(response) {
                         		console.log('GOT CHALLENGE: ', response);
                         		$scope.challenge = response.popBody;
                             });

@@ -13,11 +13,7 @@ export default angular.module('ui.media-panel', ['solVibrate'])
                     val = typeof val === 'boolean' ? val : true;
                     $scope.isCued = val;
                 };
-                
-                $scope.getAudioUrl = function() {
-                	return $sce.trustAsResourceUrl('your url');
-                	};
-                	
+
                 $scope.toggleVideo = function() {
                     $element.toggleClass('show-video');
                 };
@@ -51,7 +47,6 @@ export default angular.module('ui.media-panel', ['solVibrate'])
             replace: true,
             scope: true,
             link: function($scope, $element) {
-            	$scope.audioSrc = ''; 
                 ytPlayer.setElement($element.attr('id'));
             },
             controller: function($scope, $element, $attrs, $transclude) {
@@ -60,8 +55,7 @@ export default angular.module('ui.media-panel', ['solVibrate'])
         };
 
         return definitions;
-    }]).directive('playlistRelated', ['$rootScope', 'youtubePlayer', 'youtubeAPI', 'taAPI', 'playList', 
-                                      function($rootScope, youtubePlayer, youtubeAPI, taAPI, playList) {
+    }]).directive('playlistRelated', ['$rootScope', 'youtubePlayer', 'youtubeAPI', 'playList', function($rootScope, youtubePlayer, youtubeAPI, playList) {
         var definitions = {
             restrict: 'E',
             templateUrl: '/html/media-panel/related.html',
@@ -76,9 +70,7 @@ export default angular.module('ui.media-panel', ['solVibrate'])
                     if (!nowPlaying) return null;
                     return nowPlaying.id;
                 }, function(videoId) {
-                    if (videoId && videoId.indexOf("ta_") == 0) {
-                    	// getNext challenge?
-                    } else if (videoId) {
+                    if (videoId) {
                         youtubeAPI.getRelated(videoId).then(function(items) {
                             $scope.items = items;
                         });

@@ -11,9 +11,9 @@ export default angular.module('sol-backend', ['firebase', 'api-key'])
         let key = apiKey.get('firebase');
 
         if (key) {
-            console.log('firebase key: ', key);
-        	let url = key.databaseURL;
-            let ref = new Firebase(url);
+                console.log('firebase: ', key);
+            	let url = key.databaseURL;
+                let ref = new Firebase(url);
             resolve(ref);
         }
         else {
@@ -126,6 +126,7 @@ export default angular.module('sol-backend', ['firebase', 'api-key'])
             }).then(() => {
                 let playlists = firebase.child('playlists');
                 let data = { playlist };
+
                 return playlists.push(data);
             }).then((ref) => {
                 let metadata = firebase.child('playlists/metadata');

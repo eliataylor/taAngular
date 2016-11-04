@@ -13,8 +13,6 @@ export default [function () {
             Object.assign($scope, {
                 get tabs () {
                     return $element.find('[tab-id]').toArray().map((o) => {
-//                        var auth = o.getAttribute('tab-authenticated');
-//                        if (auth == false)
                         return {
                             id: o.getAttribute('tab-id'),
                             title: o.getAttribute('tab-title'),

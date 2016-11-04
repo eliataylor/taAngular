@@ -1,5 +1,4 @@
 import '../plugins/plugins';
-
 import './Footer';
 import './Topbar';
 import './Search';
@@ -13,9 +12,10 @@ import '../modules/sol-peerjs/sol-peerjs';
 import '../modules/sol-backend/sol-backend';
 import '../modules/user-playlists/user-playlists';
 import '../modules/google-signin/google-signin';
-import '../modules/user-login/user-login';
 import '../modules/peer-pane/peer-pane';
+import '../modules/user-login/user-login';
 import '../modules/ambiance-pane/ambiance-pane';
+
 import 'angular';
 
 const cacheUpdated = new Promise((resolve, reject) => {
@@ -36,7 +36,6 @@ export default angular.module('Application', [
     'notifications',
     'peerjs-service',
     'sol-peerjs',
-    'sol-backend',
     'user-playlists',
     'peer-pane',
     'ambiance-pane',
@@ -48,7 +47,7 @@ export default angular.module('Application', [
 	ci: 'https://localhost.trackauthoritymusic.com',
 	angular: 'https://localplayer.trackauthoritymusic.com',
 	api : 'https://localhost.trackauthoritymusic.com'
-}).directive('solarizdApp', ['$rootScope', 'ApiKey', 'playList', 'solBackend', function($rootScope, ApiKey, playList, solBackend) {
+}).directive('solarizdApp', ['$rootScope', 'ApiKey', 'playList', function($rootScope, ApiKey, playList) {
     return {
         restrict: 'E',
         templateUrl: '/html/app.html',
@@ -60,21 +59,21 @@ export default angular.module('Application', [
             } else {
                 $scope.defaultTab = 0;
             }
-            
-        	$scope.currentUser = false;
-        	$scope.isAuthenticated = false;
-        	
-        	$rootScope.currentUser = false;
-        	$rootScope.isAuthenticated = false;
-        	        	
-        	$scope.setCurrentUser = function (user) {
-        		console.log("setting global user", user);
-        		$scope.currentUser = user;
-        		if (user.user_id > 0) {
-        			$scope.isAuthenticated = user.group_user_status;
-        		}
-        	};
-            
+    
+	$scope.currentUser = false;
+	$scope.isAuthenticated = false;
+	
+	$rootScope.currentUser = false;
+	$rootScope.isAuthenticated = false;
+	        	
+	$scope.setCurrentUser = function (user) {
+		console.log("setting global user", user);
+		$scope.currentUser = user;
+		if (user.user_id > 0) {
+			$scope.isAuthenticated = user.group_user_status;
+		}
+	};
+
             ApiKey.fetchKeys().then(function() {
                 $element[0].classList.add('loaded');
             });
