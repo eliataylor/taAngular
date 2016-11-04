@@ -51,12 +51,6 @@ export default angular.module('Application', [
         replace: true,
         scope: true,
         link: function($scope, $element) {
-            $scope.dataSources = {
-            	assets: 'https://localplayer.trackauthoritymusic.com',
-            	angular: 'https://localplayer.trackauthoritymusic.com',
-            	api : 'https://localhost.trackauthoritymusic.com'
-            };
-            
             if (playList.playlist.length) {
                 $scope.defaultTab = 1;
             } else {
@@ -64,10 +58,7 @@ export default angular.module('Application', [
             }
             
         	$scope.currentUser = false;
-//        	$scope.userRoles = USER_ROLES;
-        	//$scope.isAuthorized = AuthService.isAuthorized(USER_ROLES);
-        	$scope.isAuthenticated = false; // AuthService.isAuthenticated();
-//        	console.log('is Authneticated: ', $scope.isAuthenticated);
+        	$scope.isAuthenticated = false;
         	$scope.setCurrentUser = function (user) {
         		console.log("setting global user", user);
         		$scope.currentUser = user;
@@ -87,20 +78,11 @@ export default angular.module('Application', [
                     persist: true
                 });
             });
-        },
-	    controller: function($scope, $element, $attrs, $transclude) {
-	        $scope.dataSources = {
-	        	assets: 'https://localplayer.trackauthoritymusic.com',
-	        	angular: 'https://localplayer.trackauthoritymusic.com',
-	        	api : 'https://localhost.trackauthoritymusic.com'
-	        }
-	    }   
+        }
     };
 }])
 .config(["$httpProvider", function($httpProvider) {
     $httpProvider.interceptors.push('middleware');
-//	$httpProvider.defaults.withCredentials = true;
-//	$httpProvider.defaults.headers.common['Access-Control-Allow-Credentials'] = true; 
 }]).factory('middleware', function() {
     return {
         request: function(config) {

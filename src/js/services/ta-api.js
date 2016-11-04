@@ -23,9 +23,9 @@ export default ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
         		console.log(list.data.errors);
         	} else {
         		// populate playlist!!
-                console.log(list.data.popBody);
+                console.log('getUser', list.data.popBody);
         	}
-    		return list.data.popBody;
+    		return list.data;
         });    
     }
     
@@ -38,9 +38,9 @@ export default ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
         		console.log(list.data.errors);
         	} else {
         		// populate playlist!!
-                console.log(list.data.popBody);
+                console.log('getTAplaylist', list.data.popBody);
         	}
-    		return list.data.popBody;
+    		return list.data;
         });        	
     }
     

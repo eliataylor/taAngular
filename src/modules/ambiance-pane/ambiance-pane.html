@@ -1,10 +1,130 @@
 <div class="ambiance-pane">
-   <select class="select"  
-  		id="challengeSelector"
-  		ng-options="challengeItem as challengeItem.challenge_title for challengeItem in challenges track by challengeItem.challenge_id" 
-  		ng-model="selectedChallengeItem"  
-  		ng-change="getTAplaylist()"  
-  		>
-  	</select>
-   <challenge-block> </challenge-block>
+	<div>
+	<select class="select" id="challengeSelector"
+		ng-options="challengeItem as challengeItem.challenge_title for challengeItem in challenges track by challengeItem.challenge_id"
+		ng-model="selectedChallengeItem" >
+	</select>
+	</div>
+
+	<div ng-if="challenge" style="clear:both;">
+		<challenge-block> </challenge-block>
+	</div>
+	<div ng-if="!challenge" style="clear:both;">
+		<form class="taForm" data-name="camera" name="cameraForm"
+			id="cameraForm" enctype="multipart/form-data"
+			action="https://localhost.trackauthoritymusic.com/manage/music/handle-challenge"
+			data-key="challenge-builder" method="post" accept-charset="utf-8">
+			<div class="pop_container_advanced">
+				<div class="pop_content" style="overflow-x: hidden;">
+					<h2 class="dialog_title">
+						Challenge the Group: fantasy trackBALL 
+						
+						<span class="formStatus">November 3, 2016, 5:18 pm </span>
+					</h2>
+					<div class="dialog_content">
+						<div class="dialog_body">
+							<div class="gigaboxx_composer_fieldset">
+								<div class="field_set_wrapper">
+									<div class="formWrapper" style="width: 95%">
+										<p style="font-style: italic; font-weight: bold;">Create a
+											theme and set the rules for your Challenge.</p>
+
+										<div class="leftHalf">
+											<ul>
+												<li class="full"><label class="desc"><span
+														class="asterisk">*</span>Title</label>
+													<div>
+														<input type="field text" value="" name="title"
+															title="please provide a title"
+															class="required field large">
+													</div></li>
+
+												<li class="full"><label class="desc"><span
+														class="asterisk">*</span>What are you looking for?</label>
+													<div>
+														<textarea name="summary" rows="4" cols="50"
+															class="field textarea medium"></textarea>
+													</div></li>
+
+												<li class="full"><label class="desc">Minimum
+														Pool To Begin ($USD)</label>
+													<div>
+														<input class="field currency numeric" value="125" title=""
+															name="minpool" type="text">
+														<p class="desc">Minimum amount is $125. House takes
+															20% of final pool. Buy-Ins are $5/track</p>
+													</div></li>
+
+												<li class="full"><label class="desc">Pool
+														Deadline</label>
+													<div>
+														<input class="field date" title="" value=""
+															name="startdate" type="date">
+														<p class="desc">If the pool is reached or exceeded by
+															this date, betting begins. Leave empty for now deadline</p>
+													</div></li>
+											</ul>
+										</div>
+
+										<div class="rightHalf">
+											<ul>
+												<li class="imgControlCol">
+													<p style="font-size: 11px; margin-bottom: 0;"
+														class="miniText">
+														<span class="asterisk">*</span>an image is required
+													</p> <input type="file" accept="image/*" name="image"
+													id="imageInp"
+													onchange="tamer.toggleSampleImg(this, true); return false;"
+													style="position: absolute; left: -2000px;"> <input
+													type="hidden" name="challenge_image">
+													<div class="thumbHolder"
+														onclick="$('#imageInp').trigger('click'); return false;">
+
+														<span class="tmmss camera"></span>
+													</div>
+													<div class="btnBox">
+														<button style="width: 100%; border-radius: 0 0 7px 7px"
+															class="blkBtn blkShadow"
+															onclick="$('#imageInp').trigger('click'); return false;">Add
+															An Image</button>
+
+														<a
+															style="cursor: pointer; display: none; font-size: 11px;"
+															id="sampleResetter"
+															onclick="tamer.toggleSampleImg(this, true); return false;">reset</a>
+													</div>
+												</li>
+											</ul>
+										</div>
+
+										<p
+											style="font-style: italic; margin: 10px 0 5px 0; clear: both; font-weight: bolder">Once
+											you submit this, you will go to your Profile page and add
+											some sample tracks to make it appear for the Group</p>
+
+									</div>
+									<div class="formButtons">
+										<button style="display: none" class="blkBtn resetBtn"
+											type="button">
+											<span class="lineImg tmmss refreshWhite"></span>Reset
+										</button>
+
+										<button class="submitBtn" type="submit">
+											<span class="lineImg tmmss checkSilver"></span>Submit
+										</button>
+									</div>
+
+									<div class="fbPreloader"></div>
+									<div class="clearer"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="gid" value="3"> 
+			<input type="hidden" name="formName" value="camera">
+		</form>
+
+	</div>
 </div>

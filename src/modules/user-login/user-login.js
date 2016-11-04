@@ -32,7 +32,7 @@ var app = angular.module('user-login', ['sol-backend', 'services'])
 	  if (parts.length == 2) cookie = parts.pop().split(";").shift();
 	  console.log('cookie', cookie);
 	  if (cookie.length > 10) {
-		  $http.get('https://localhost.trackauthoritymusic.com/json/getme', { withCredentials: true })
+		  $http.get('https://localhost.trackauthoritymusic.com/json/getme')
 		  .then(function(res) {
 			  if (res.data.error) {
 				  console.log('tacsession failed', res.data.error);
@@ -107,11 +107,6 @@ var app = angular.module('user-login', ['sol-backend', 'services'])
         method: "POST",
         dataType: 'json',
         data: serializeParams(credentials)
-//        ,
-//        withCredentials: true,
-//        headers: {
-//            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
-//        }
     })
     .then(function(res) {
 	        Session.create(res.data);

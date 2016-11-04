@@ -26,12 +26,9 @@ export default angular.module('ambiance-pane',
             });
         }, 
         controller: function($scope, $element, $attrs) {
-        	
-        	console.log("AMBIANCE CONTROLLER", cid, state, $scope.isAuthenticated);
-            $scope.challenges = [];
+        	$scope.challenges = [];
             $scope.challenge = null;
-            $scope.selectedChallengeItem=null;
-            $scope.cid = null;
+            $scope.selectedChallengeItem =  {challenge_id:-1,challenge_title:"My custom playlist",group_id:-1};
 
         	var cid = playList.getNowPlayingIdx();
         	var state = playList.getState();
@@ -41,8 +38,12 @@ export default angular.module('ambiance-pane',
 
                 taAPI.getChallenges().then(function(response) {
                 	if (typeof response.popBody == 'object') {
-                		console.log('ALL CHALLENGESL: ', response);
-                        $scope.challenges = response.popBody; // update main select
+                		console.log('ALL CHALLENGES: ', response);
+                        $scope.challenges = response.popBody;
+                        for(var i in response.popBody) {
+                            $scope.selectedChallengeItem = response.popBody[i];
+                        	break;
+                        }
                         
                         /* check if a song is already queued
                     	var q = $scope.$$prevSibling.query;
@@ -55,11 +56,19 @@ export default angular.module('ambiance-pane',
                             }                        		
                     	}
                     	*/
+                                            	
+                    	if ($scope.selectedChallengeItem.challenge_id > 0) {
+                    		var cid = $scope.selectedChallengeItem.challenge_id;
+                    		taAPI.getTAplaylist(cid).then(function(response) {
+                        		console.log('GOT CHALLENGE: ', response);
+                        		$scope.challenge = response.popBody;
+                            });
+                    	}
+                    	
                     }
                 });
-	
         	}
-        	        	
+
             $scope.items = playList.playlist;
             $scope.$watch(() => playList.metadata, (newVal, oldVal) => {
                 if (!!newVal) {
@@ -87,7 +96,11 @@ export default angular.module('ambiance-pane',
             scope: true,
             transclude:true,
             link: function($scope, $element, $attrs) {
-                
+    	        $scope.dataSources = {
+		        	ci: 'https://localhost.trackauthoritymusic.com',
+		        	angular: 'https://localplayer.trackauthoritymusic.com',
+		        	api : 'https://localhost.trackauthoritymusic.com'
+		        }
             }
         };
         return definitions;
