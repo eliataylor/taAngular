@@ -25,7 +25,13 @@ var app = angular.module('user-login', ['sol-backend', 'services'])
     scope: true,
     link: function ($scope, element, attrs) {
 	  console.log('userLogin Directive: ', AUTH_EVENTS, $scope.isAuthenticated);
-	  	  
+
+	  	$scope.currentUser = false;
+		$scope.isAuthenticated = false;
+		
+    	$rootScope.currentUser = false;
+    	$rootScope.isAuthenticated = false;
+		
 	  var cookie = false;
 	  var value = "; " + document.cookie;
 	  var parts = value.split("; " + 'tacsession' + "=");

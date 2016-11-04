@@ -2,14 +2,12 @@
     <sol-tabs id="main-view" data-loggedin="{{isAuthenticated}}" selected="{{defaultTab}}">
     	<ambiance-pane
     		ng-ig="isAuthenticated"
-    		tab-authenticated="{{isAuthenticated}}"
-    	    tab-id="ambiance-pane"
+    		tab-id="ambiance-pane"
             tab-title="Ambiance"
             tab-icon="ambiance" ></ambiance-pane>
     	<user-login
     		ng-ig="!isAuthenticated"
-    		tab-authenticated="{{isAuthenticated}}"
-    	    tab-id="user-login"
+    		tab-id="user-login"
             tab-title="Login"
             tab-icon="login" ></user-login>
             

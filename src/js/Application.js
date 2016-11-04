@@ -44,7 +44,11 @@ export default angular.module('Application', [
     'playlist',
     'services',
     'plugins'
-]).directive('solarizdApp', ['$rootScope', 'ApiKey', 'playList', 'solBackend', function($rootScope, ApiKey, playList, solBackend) {
+]).constant('DATA_SOURCES', {
+	ci: 'https://localhost.trackauthoritymusic.com',
+	angular: 'https://localplayer.trackauthoritymusic.com',
+	api : 'https://localhost.trackauthoritymusic.com'
+}).directive('solarizdApp', ['$rootScope', 'ApiKey', 'playList', 'solBackend', function($rootScope, ApiKey, playList, solBackend) {
     return {
         restrict: 'E',
         templateUrl: '/html/app.html',
@@ -59,11 +63,15 @@ export default angular.module('Application', [
             
         	$scope.currentUser = false;
         	$scope.isAuthenticated = false;
+        	
+        	$rootScope.currentUser = false;
+        	$rootScope.isAuthenticated = false;
+        	        	
         	$scope.setCurrentUser = function (user) {
         		console.log("setting global user", user);
         		$scope.currentUser = user;
-        		if (user.user_id) {
-        			$scope.isAuthenticated = user.user_status;
+        		if (user.user_id > 0) {
+        			$scope.isAuthenticated = user.group_user_status;
         		}
         	};
             
@@ -78,9 +86,29 @@ export default angular.module('Application', [
                     persist: true
                 });
             });
+        }, 
+        controller : function($scope, $rootScope) {
+        	console.log('solarizdApp controller');
+        	$scope.currentUser = false;
+        	$scope.isAuthenticated = false;
+        	$scope.setCurrentUser = function (user) {
+        		console.log("setting global user from controller", user);
+        		$scope.currentUser = user;
+        		if (user.user_id > 0) {
+        			$scope.isAuthenticated = user.group_user_status;
+        		}
+        	};
         }
     };
-}])
+}]).controller('ApplicationController', function ($scope, $rootScope, DATA_SOURCES) {
+	console.log('ApplicationController', DATA_SOURCES);
+	$scope.currentUser = false;
+	$scope.isAuthenticated = false;
+	
+	$rootScope.currentUser = false;
+	$rootScope.isAuthenticated = false;
+
+})
 .config(["$httpProvider", function($httpProvider) {
     $httpProvider.interceptors.push('middleware');
 }]).factory('middleware', function() {

@@ -26,10 +26,12 @@ export default angular.module('ambiance-pane',
             });
         }, 
         controller: function($scope, $element, $attrs) {
-        	$scope.challenges = [];
+        	$scope.challenges = [{challenge_id:-1,challenge_title:"My custom playlist",group_id:-1}];
             $scope.challenge = null;
-            $scope.selectedChallengeItem =  {challenge_id:-1,challenge_title:"My custom playlist",group_id:-1};
-
+            $scope.selectedChallengeItem = [0];
+        	$scope.currentUser = false;
+        	$scope.isAuthenticated = false;
+        	
         	var cid = playList.getNowPlayingIdx();
         	var state = playList.getState();
         	
@@ -39,7 +41,10 @@ export default angular.module('ambiance-pane',
                 taAPI.getChallenges().then(function(response) {
                 	if (typeof response.popBody == 'object') {
                 		console.log('ALL CHALLENGES: ', response);
-                        $scope.challenges = response.popBody;
+                        var options = response.popBody;
+                        options['_-1'] = {challenge_id:-1,challenge_title:"My custom playlist",group_id:-1};
+                		$scope.challenges = options;
+                        
                         for(var i in response.popBody) {
                             $scope.selectedChallengeItem = response.popBody[i];
                         	break;
